@@ -14,14 +14,14 @@ var mouseY = 0;
 $mesh = false;
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
+$enableMove= false;
 
+document.addEventListener('mousemove', onDocumentMouseMove, false);
+document.addEventListener('touchmove', onDocumentMouseMove, false);
 document.addEventListener('mousedown', onDocumentMouseDown, false);
-document.addEventListener('mouseup', function(){
-	$speed = 0.005;
-	glitchPass.goWild = false;
-	model.scale.set(1,1,1);
-	camera.position.z = 3000;		
-}, false);
+document.addEventListener('touchstart', onDocumentMouseDown, false);
+document.addEventListener('mouseup', onDocumentMouseUp, false);
+document.addEventListener('touchend', onDocumentMouseUp, false);
 
 init();
 animate();
@@ -39,9 +39,9 @@ function init() {
 	var path = "assets/images/cube/hv/";
 	var format = '.png';
 	var urls = [
-			path + 'posz' + format, path + 'negz' + format,
+			path + 'posy' + format, path + 'negy' + format,
 			path + 'posx' + format, path + 'negx' + format,
-			path + 'posy' + format, path + 'posz' + format
+			path + 'negz' + format, path + 'posz' + format
 		];
 
 	var reflectionCube = new THREE.CubeTextureLoader().load( urls );
@@ -142,8 +142,30 @@ function createScene( geometry, m2 ) {
 function onDocumentMouseDown(event) {
 	glitchPass.goWild = true;
 	$speed = -0.05;
-	model.scale.set(2,2,2);
+	//model.scale.set(2,2,2);
 	camera.position.z = 800;
+	//camera.rotation.x = 15;
+	//camera.rotation.y = 5;
+	//camera.rotation.z = 0;
+	$enableMove= true;
+}
+function onDocumentMouseMove(event) {
+	if($enableMove){
+		mouseX = ( event.clientX - windowHalfX ) * 4;
+		mouseY = ( event.clientY - windowHalfY ) * 4;
+	}
+	//console.log(mouseX);
+}
+function onDocumentMouseUp(event){
+	$speed = 0.005;
+	glitchPass.goWild = false;
+	$enableMove= false;
+	model.scale.set(1,1,1);
+	camera.rotation.x = 0;
+	camera.rotation.y = 0;
+	camera.rotation.z = 0;
+	camera.position.z = 3000;		
+	
 }
 
 //
@@ -160,15 +182,10 @@ function animate() {
 		$m++;
 		if($m > 2){
 			model.rotation.y -= $speed;
-			//new TWEEN.Tween( model.rotation ).to( {  y:  model.rotation.y + rad90}, 1000 ).easing( TWEEN.Easing.Quadratic.EaseOut).start();		
-		} else{
-			console.log('mesh, '+$m);		
-		}	
-	} else{
-		console.log('no mesh');
-	}
+		} 
+	} 
 
-	composer.render();
+	render();
 
 }
 function render() {
@@ -182,6 +199,6 @@ function render() {
 
 	camera.lookAt( scene.position );
 
-	renderer.render( scene, camera );
+	composer.render( scene, camera );
 
 }
