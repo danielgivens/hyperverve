@@ -1,0 +1,14 @@
+$sans: 'Helvetica', sans-serif;
+html {
+	font-family: $sans;
+	font-size: 100%;
+	line-height: 1.2;
+	font-weight: 500;
+	-webkit-font-smoothing: subpixel-antialiased;
+	font-variant-ligatures: common-ligatures;
+	font-size: 22px;
+	@include breakpoint(large){font-size: 20px;}
+	@include breakpoint(small){font-size: 18px;}
+	@include breakpoint(tablet){font-size: 18px;}
+	@include breakpoint(mobile){font-size: 14px;}
+}
