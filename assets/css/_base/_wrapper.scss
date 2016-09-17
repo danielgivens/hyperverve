@@ -33,3 +33,9 @@ nav{
 		margin-left: 30px;		
 	}
 }
+.pressed{
+	#logo,
+	nav{
+		display: none;
+	}
+}

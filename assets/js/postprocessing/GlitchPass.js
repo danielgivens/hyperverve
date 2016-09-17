@@ -52,14 +52,14 @@ THREE.GlitchPass.prototype = Object.assign( Object.create( THREE.Pass.prototype 
 			this.uniforms[ 'seed_x' ].value = THREE.Math.randFloat( - .025, .125 );
 			this.uniforms[ 'seed_y' ].value = THREE.Math.randFloat( - .025, .125 );
 			this.uniforms[ 'distortion_x' ].value = .21;
-			this.uniforms[ 'distortion_y' ].value = .1;
+			this.uniforms[ 'distortion_y' ].value = 0;
 			this.curF = 0;
 			this.generateTrigger();
 		} else if ( this.goWild == false ) {
 			this.uniforms[ 'amount' ].value = 0.001;
 			this.uniforms[ 'angle' ].value = 0;
-			this.uniforms[ 'distortion_x' ].value = 0.001;
-			this.uniforms[ 'distortion_y' ].value = 0.001;
+			this.uniforms[ 'distortion_x' ].value = -10.001;
+			this.uniforms[ 'distortion_y' ].value = -10.001;
 			this.uniforms[ 'seed_x' ].value = 0.001;
 			this.uniforms[ 'seed_y' ].value = 0.001;
 			this.uniforms[ 'byp' ].value = 0;
