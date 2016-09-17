@@ -20,7 +20,7 @@ animate();
 
 
 document.addEventListener('mousemove', onDocumentMouseMove, false);
-document.addEventListener('touchmove', onDocumentMouseMove, false);
+//document.addEventListener('touchmove', onDocumentMouseMove, false);
 document.addEventListener('mousedown', onDocumentMouseDown, false);
 document.addEventListener('touchstart', onDocumentMouseDown, false);
 document.addEventListener('mouseup', onDocumentMouseUp, false);
