@@ -3,7 +3,7 @@ var container, stats;
 var camera, scene, renderer;
 
 var mesh, geometry, model;
-
+$body = $('body');
 var loader;
 $y = 0;
 $m = 0;
@@ -15,6 +15,9 @@ $mesh = false;
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 $enableMove= false;
+init();
+animate();
+
 
 document.addEventListener('mousemove', onDocumentMouseMove, false);
 document.addEventListener('touchmove', onDocumentMouseMove, false);
@@ -23,14 +26,9 @@ document.addEventListener('touchstart', onDocumentMouseDown, false);
 document.addEventListener('mouseup', onDocumentMouseUp, false);
 document.addEventListener('touchend', onDocumentMouseUp, false);
 
-init();
-animate();
-
 function init() {
-
 	container = document.createElement( 'div' );
 	document.body.appendChild( container );
-
 	camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 5000 );
 	camera.position.z = 3000;
 
@@ -104,7 +102,6 @@ function init() {
 	glitchPass.renderToScreen = true;
 	composer.addPass( glitchPass );
 	window.addEventListener( 'resize', onWindowResize, false );
-
 }
 
 function onWindowResize() {
@@ -142,30 +139,30 @@ function createScene( geometry, m2 ) {
 function onDocumentMouseDown(event) {
 	glitchPass.goWild = true;
 	$speed = -0.05;
-	//model.scale.set(2,2,2);
-	camera.position.z = 800;
-	//camera.rotation.x = 15;
-	//camera.rotation.y = 5;
-	//camera.rotation.z = 0;
+	model.scale.set(4,4,4);
+	//camera.position.z = 800;
 	$enableMove= true;
+	//reflectionCube.rotation.set(0,2,0);
+	$body.addClass('pressed');
 }
 function onDocumentMouseMove(event) {
 	if($enableMove){
 		mouseX = ( event.clientX - windowHalfX ) * 4;
 		mouseY = ( event.clientY - windowHalfY ) * 4;
+		if($mesh){
+
+		}
 	}
-	//console.log(mouseX);
 }
 function onDocumentMouseUp(event){
 	$speed = 0.005;
 	glitchPass.goWild = false;
 	$enableMove= false;
 	model.scale.set(1,1,1);
-	camera.rotation.x = 0;
-	camera.rotation.y = 0;
-	camera.rotation.z = 0;
+	camera.position.x = 0;
+	camera.position.y = 0;
 	camera.position.z = 3000;		
-	
+	$body.removeClass('pressed');
 }
 
 //
@@ -193,10 +190,11 @@ function render() {
 	var timer = -0.0002 * Date.now();
 	//pointLight.position.x = 1500 * Math.cos( timer );
 	//pointLight.position.z = 1500 * Math.sin( timer );
-
-	camera.position.x += ( mouseX - camera.position.x ) * .05;
-	camera.position.y += ( - mouseY - camera.position.y ) * .05;
-
+	if($enableMove){
+		camera.position.x += ( mouseX - camera.position.x ) *2;
+		camera.position.y += ( - mouseY - camera.position.y ) *2;
+		//console.log((mouseX - camera.position.x ) * .05);
+	}
 	camera.lookAt( scene.position );
 
 	composer.render( scene, camera );
