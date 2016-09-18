@@ -43,6 +43,9 @@ document.addEventListener('touchend', onDocumentMouseUp, false);
 document.addEventListener('touchmove', function(e){
     e.preventDefault();
 }, false);
+$('#about-btn').click(function(e){
+	onAboutClick(e);
+});
 $('#mute').click(function(){
 	if($body.hasClass('muted')){
 		playSound();
@@ -66,7 +69,7 @@ function init() {
 	var format = '.png';
 	var urls = [
 		path + 'posx' + format, path + 'posx' + format,
-		path + 'posx' + format, path + 'posx' + format,
+		path + 'posx' + format, path + 'posy' + format,
 		path + 'posx' + format, path + $bg + format
 	];
 
@@ -79,7 +82,7 @@ function init() {
 	var ambient = new THREE.AmbientLight( 0xffffff );
 	scene.add( ambient );
 
-	pointLight = new THREE.PointLight( 0xffffff, 2 );
+	pointLight = new THREE.PointLight( 0xffffff, 0.5 );
 	scene.add( pointLight );
 
 	var refractionCube = new THREE.CubeTextureLoader().load( urls );
@@ -139,12 +142,39 @@ function createScene( geometry, m2 ) {
 	render();
 }
 function onDocumentMouseDown(event) {
+	if($(event.target).attr('id') != 'about-btn'){
 	glitchPass.goWild = true;
-	$speed = -0.05;
-	model.scale.set(4,4,4);
+	$speed = -.025;
+	model.scale.set(6,6,6);
 	$enableMove= true;
 	$body.addClass('pressed');
+	//camera.position.x = 3000 * Math.cos( .01 );  
+	camera.position.z = 4000 * Math.cos( .01 );	
 	if($audio && sound){sound.playbackRate.value = 1;}
+	}
+}
+//tween.start();
+function onAboutClick(event) {
+	var tween1 = new TWEEN.Tween( model.scale ).to( { x:6,y:6,z:6 }, 3000 ).easing( TWEEN.Easing.Exponential.InOut );
+	//var tween3 = new TWEEN.Tween( model.rotation ).to( { x:3,z:3,y:3 }, 3000 ).easing( TWEEN.Easing.Exponential.InOut );
+	//var tween4 = new TWEEN.Tween( model.position ).to( { y:1000 }, 3000 ).easing( TWEEN.Easing.Exponential.InOut );
+	var tween2 = new TWEEN.Tween( camera.position ).to( { x:0,y:windowHalfY*12,z:500 }, 3000 ).easing( TWEEN.Easing.Exponential.InOut );
+	glitchPass.goWild = false;
+	//$speed =0;
+	//model.scale.set(6,6,6);
+	$enableMove= false;
+	$body.addClass('pressed');
+	//camera.position.x = 2000;	
+	//camera.position.z = 1000;	
+	//tween1.start();
+	tween1.start();
+	//tween4.start();
+	//tween3.start();
+	tween2.start();
+	tween2.onComplete(function() {
+	  //glitchPass.goWild = false;
+	  //pointLight.intensity = 0;
+	});
 }
 function onDocumentMouseMove(event) {
 	mouseX = ( event.clientX - windowHalfX )*3;
@@ -152,6 +182,7 @@ function onDocumentMouseMove(event) {
 	if($enableMove && $audio && sound){
 		sound.detune.value = ( event.clientY - windowHalfY )/2;
 	}
+	
 	e=event;
 	pauseEvent(e);	
 }
@@ -181,6 +212,7 @@ THREE.DefaultLoadingManager.onProgress = function ( item, loaded, total ) {
 	    $mesh = true;
     }
 };
+
 function animate() {
 	requestAnimationFrame( animate );	
 	if($mesh){
@@ -189,14 +221,22 @@ function animate() {
 			model.rotation.y -= $speed;
 		} 
 	} 
+	TWEEN.update();
 	render();
 }
+var angle = 0;
+var radius = 3000; 
 function render() {
 	var timer = -0.0002 * Date.now();
 	if($enableMove){
-		camera.position.x += ( mouseX - camera.position.x );
-		camera.position.y += ( - mouseY - camera.position.y );
+		//camera.position.x += ( mouseX - camera.position.x );
+		//camera.position.y += ( - mouseY - camera.position.y );
 	}
+	pointLight.position.x += ( mouseX - pointLight.position.x ) * 0.5;
+	pointLight.position.y += ( mouseY - pointLight.position.y ) * 0.5;
+	//camera.position.x = radius * Math.cos( angle );  
+	//camera.position.z = radius * Math.sin( angle );
+	//angle += 0.01;
 	camera.lookAt( scene.position );
 	composer.render( scene, camera );
 }

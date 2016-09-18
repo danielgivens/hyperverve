@@ -63,7 +63,7 @@ THREE.GlitchPass.prototype = Object.assign( Object.create( THREE.Pass.prototype 
 			this.uniforms[ 'seed_x' ].value = 0.001;
 			this.uniforms[ 'seed_y' ].value = 0.001;
 			this.uniforms[ 'byp' ].value = 0;
-		}
+		} 
 
 		this.curF ++;
 		this.quad.material = this.material;
