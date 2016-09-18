@@ -31,8 +31,7 @@ if($audio){
 	var audioContext = new(window.AudioContext || window.webkitAudioContext)(),
 	    sampleBuffer, 
 	    sound,
-	    loop = true,
-	    pannner = audioContext.createStereoPanner();	
+	    loop = true;
 }
 init();
 animate();
