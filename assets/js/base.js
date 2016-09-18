@@ -15,7 +15,6 @@ $mesh = false;
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 $enableMove= false;
-
 var a = document.createElement('audio');
 $audio = !!(a.canPlayType && a.canPlayType('audio/mpeg;').replace(/no/, ''));
 if($audio){
@@ -30,7 +29,6 @@ animate();
 
 
 document.addEventListener('mousemove', onDocumentMouseMove, false);
-//document.addEventListener('touchmove', onDocumentMouseMove, false);
 document.addEventListener('mousedown', onDocumentMouseDown, false);
 document.addEventListener('touchstart', onDocumentMouseDown, false);
 document.addEventListener('mouseup', onDocumentMouseUp, false);
@@ -46,7 +44,6 @@ $('#mute').click(function(){
 	}
 })
 
-
 function init() {
 	if($audio){
 		$body.addClass('audio');
@@ -56,9 +53,6 @@ function init() {
 	document.body.appendChild( container );
 	camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 5000 );
 	camera.position.z = 3000;
-
-	//
-
 	var path = "assets/images/cube/hv/";
 	var format = '.png';
 	var urls = [
@@ -103,22 +97,11 @@ function init() {
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	container.appendChild( renderer.domElement );
 
-	//
-
-
-	//
-
-	//loader = new THREE.BinaryLoader();
-	//loader.load( "assets/models/WaltHead_bin.js", function( geometry ) { createScene( geometry, cubeMaterial1, cubeMaterial2, cubeMaterial3 ) } );
-
 	var jsonModelURL = [  // available JSON model files
 	    "assets/models/hv2.json",
 	]
     var loader = new THREE.JSONLoader();
     loader.load(jsonModelURL[0], function( geometry ) { createScene( geometry, cubeMaterial2 ) });
-
-
-	//
 
 	composer = new THREE.EffectComposer( renderer );
 	composer.addPass( new THREE.RenderPass( scene, camera ) );
@@ -146,11 +129,6 @@ function createScene( geometry, m2 ) {
 
 	var s = 400;
 
-	/*var mesh = new THREE.Mesh( geometry, m1 );
-	mesh.position.z = - 100;
-	mesh.scale.x = mesh.scale.y = mesh.scale.z = s;
-	scene.add( mesh );*/
-
 	var mesh = new THREE.Mesh( geometry, m2 );
 	mesh.position.z = 0;
 	mesh.scale.x = mesh.scale.y = mesh.scale.z = s;
@@ -158,17 +136,13 @@ function createScene( geometry, m2 ) {
 	model.add(mesh);
 	model.rotation.set(0,0,0);
 	scene.add(model);
-	
-	//scene.add( mesh );
 	render();
 }
 function onDocumentMouseDown(event) {
 	glitchPass.goWild = true;
 	$speed = -0.05;
 	model.scale.set(4,4,4);
-	//camera.position.z = 800;
 	$enableMove= true;
-	//reflectionCube.rotation.set(0,2,0);
 	$body.addClass('pressed');
 	if($audio){sound.playbackRate.value = 1;}
 }
@@ -194,10 +168,10 @@ function onDocumentMouseUp(event){
 	}
 }
 
-//
 THREE.DefaultLoadingManager.onProgress = function ( item, loaded, total ) {
     if(loaded === total){
 	    $mesh = true;
+	    alert('test');
     }
 };
 function animate() {
