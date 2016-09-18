@@ -26,10 +26,10 @@ nav{
 		color:white;
 		text-decoration: none;
 		text-transform: uppercase;
-		font-family:'Grotesque MT', sans-serif;
-		font-weight:bold;
+		font-family:$sans;
+		font-weight:700;
 		line-height: 60px;
-		font-size: 10px;
+		font-size: 12px;
 		letter-spacing: 2px;
 		margin-left: 15px;		
 	}
@@ -41,9 +41,9 @@ nav{
 	color:white;
 	text-decoration: none;
 	text-transform: uppercase;
-	font-family:'Grotesque MT', sans-serif;
+	font-family:$narrow;
 	font-size: 10px;
-	letter-spacing: 2px;
+	letter-spacing: 3px;
 	writing-mode: vertical-lr;
 	cursor: pointer;
 	display: none;
@@ -67,5 +67,8 @@ nav{
 	nav{
 		top:30px;
 		right:30px;
+		a{
+			font-size: 10px;
+		}
 	}
 }
