@@ -59,9 +59,13 @@ nav{
 		text-decoration: line-through;
 	}
 }
-.pressed{
-	#logo,
+@include breakpoint(mobile){
+	#logo{
+		left:30px;
+		top:30px;
+	}
 	nav{
-		//display: none;
+		top:30px;
+		right:30px;
 	}
 }
