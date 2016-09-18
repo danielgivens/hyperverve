@@ -46,6 +46,10 @@ document.addEventListener('touchmove', function(e){
 $('#about-btn').click(function(e){
 	onAboutClick(e);
 });
+$('#contact-btn').click(function(e){
+	onContactClick(e);
+});
+
 $('#mute').click(function(){
 	if($body.hasClass('muted')){
 		playSound();
@@ -68,8 +72,8 @@ function init() {
 	var path = "assets/images/cube/";
 	var format = '.png';
 	var urls = [
+		path + 'posy' + format, path + 'photo' + format,
 		path + 'posx' + format, path + 'posx' + format,
-		path + 'posx' + format, path + 'posy' + format,
 		path + 'posx' + format, path + $bg + format
 	];
 
@@ -142,7 +146,7 @@ function createScene( geometry, m2 ) {
 	render();
 }
 function onDocumentMouseDown(event) {
-	if($(event.target).attr('id') != 'about-btn'){
+	if($(event.target).attr('id') != 'about-btn' && $(event.target).attr('id') != 'contact-btn'){
 	glitchPass.goWild = true;
 	$speed = -.025;
 	model.scale.set(6,6,6);
@@ -155,20 +159,34 @@ function onDocumentMouseDown(event) {
 }
 //tween.start();
 function onAboutClick(event) {
-	var tween1 = new TWEEN.Tween( model.scale ).to( { x:6,y:6,z:6 }, 3000 ).easing( TWEEN.Easing.Exponential.InOut );
-	//var tween3 = new TWEEN.Tween( model.rotation ).to( { x:3,z:3,y:3 }, 3000 ).easing( TWEEN.Easing.Exponential.InOut );
-	//var tween4 = new TWEEN.Tween( model.position ).to( { y:1000 }, 3000 ).easing( TWEEN.Easing.Exponential.InOut );
-	var tween2 = new TWEEN.Tween( camera.position ).to( { x:0,y:windowHalfY*12,z:500 }, 3000 ).easing( TWEEN.Easing.Exponential.InOut );
+	var tween1 = new TWEEN.Tween( model.scale ).to( { x:4,y:4,z:4 }, 3000 ).easing( TWEEN.Easing.Exponential.InOut );
+	//var tween3 = new TWEEN.Tween( model.rotation ).to( { x:-4,z:4,y:4 }, 3000 ).easing( TWEEN.Easing.Exponential.InOut );
+	//var tween4 = new TWEEN.Tween( model.position ).to( { z:-1000 }, 3000 ).easing( TWEEN.Easing.Exponential.InOut );
+	var tween2 = new TWEEN.Tween( camera.position ).to( { x:1500,y:0,z:10 }, 3000 ).easing( TWEEN.Easing.Exponential.InOut );
 	glitchPass.goWild = false;
 	//$speed =0;
 	//model.scale.set(6,6,6);
 	$enableMove= false;
 	$body.addClass('pressed');
-	//camera.position.x = 2000;	
-	//camera.position.z = 1000;	
-	//tween1.start();
 	tween1.start();
-	//tween4.start();
+	//tween3.start();
+	tween2.start();
+	tween2.onComplete(function() {
+	  //glitchPass.goWild = false;
+	  //pointLight.intensity = 0;
+	});
+}
+function onContactClick(event) {
+	var tween1 = new TWEEN.Tween( model.scale ).to( { x:4,y:4,z:4 }, 3000 ).easing( TWEEN.Easing.Exponential.InOut );
+	//var tween3 = new TWEEN.Tween( model.rotation ).to( { x:4,z:4,y:-4 }, 3000 ).easing( TWEEN.Easing.Exponential.InOut );
+	//var tween4 = new TWEEN.Tween( model.position ).to( { z:-1000 }, 3000 ).easing( TWEEN.Easing.Exponential.InOut );
+	var tween2 = new TWEEN.Tween( camera.position ).to( { x:-1500,y:0,z:10 }, 3000 ).easing( TWEEN.Easing.Exponential.InOut );
+	glitchPass.goWild = false;
+	//$speed =0;
+	//model.scale.set(6,6,6);
+	$enableMove= false;
+	$body.addClass('pressed');
+	tween1.start();
 	//tween3.start();
 	tween2.start();
 	tween2.onComplete(function() {
@@ -229,8 +247,9 @@ var radius = 3000;
 function render() {
 	var timer = -0.0002 * Date.now();
 	if($enableMove){
-		//camera.position.x += ( mouseX - camera.position.x );
-		//camera.position.y += ( - mouseY - camera.position.y );
+		camera.position.x += ( mouseX - camera.position.x );
+		camera.position.y += ( - mouseY - camera.position.y );
+		console.log(camera.position.x);
 	}
 	pointLight.position.x += ( mouseX - pointLight.position.x ) * 0.5;
 	pointLight.position.y += ( mouseY - pointLight.position.y ) * 0.5;
