@@ -61,7 +61,7 @@ function init() {
 	document.body.appendChild( container );
 	camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 5000 );
 	camera.position.z = 3000;
-	var path = "assets/images/cube/hv/";
+	var path = "assets/images/cube/";
 	var format = '.png';
 	var urls = [
 		path + 'posx' + format, path + 'posx' + format,
