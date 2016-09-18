@@ -20,7 +20,8 @@ var audioContext = new(window.AudioContext || window.webkitAudioContext)(),
     sound,
     loop = true,
     pannner = audioContext.createStereoPanner();
-
+var a = document.createElement('audio');
+$audio = !!(a.canPlayType && a.canPlayType('audio/mpeg;').replace(/no/, ''));
 init();
 animate();
 
@@ -44,7 +45,10 @@ $('#mute').click(function(){
 
 
 function init() {
-	loadSound('assets/audio/loop.mp3');
+	if($audio){
+		$body.addClass('audio');
+		loadSound('assets/audio/loop.mp3');
+	}
 	container = document.createElement( 'div' );
 	document.body.appendChild( container );
 	camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 5000 );
@@ -163,12 +167,12 @@ function onDocumentMouseDown(event) {
 	$enableMove= true;
 	//reflectionCube.rotation.set(0,2,0);
 	$body.addClass('pressed');
-	 sound.playbackRate.value = 1;
+	if($audio){sound.playbackRate.value = 1;}
 }
 function onDocumentMouseMove(event) {
 		mouseX = ( event.clientX - windowHalfX )*3;
 		mouseY = ( event.clientY - windowHalfY )*3;
-	if($enableMove){
+	if($enableMove && $audio){
 		sound.detune.value = ( event.clientY - windowHalfY )/2;
 	}
 }
@@ -181,8 +185,10 @@ function onDocumentMouseUp(event){
 	camera.position.y = 0;
 	camera.position.z = 3000;		
 	$body.removeClass('pressed');
-	sound.playbackRate.value = 0.25;
-	sound.detune.value = 0;
+	if($audio){
+		sound.playbackRate.value = 0.25;
+		sound.detune.value = 0;
+	}
 }
 
 //
@@ -237,7 +243,6 @@ function loadSound(url) {
             //loopEnd.setAttribute('max', Math.floor(soundLength));
             //playButton.disabled = false;
             //playButton.innerHTML = 'play';
-            console.log(soundLength);
             playSound();
 
         });

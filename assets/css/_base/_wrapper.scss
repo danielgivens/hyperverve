@@ -45,7 +45,13 @@ nav{
 	letter-spacing: 2px;
 	writing-mode: vertical-lr;
 	cursor: pointer;
+	display: none;
 	@include transform(rotate(180deg));
+}
+.audio{
+	#mute{
+		display: block;
+	}
 }
 .muted{
 	#mute{
