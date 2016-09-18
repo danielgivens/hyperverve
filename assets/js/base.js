@@ -15,7 +15,8 @@ $mesh = false;
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 $enableMove= false;
-var a = document.createElement('audio');
+$audio = false;
+/*var a = document.createElement('audio');
 $audio = !!(a.canPlayType && a.canPlayType('audio/mpeg;').replace(/no/, ''));
 if($audio){
 	var audioContext = new(window.AudioContext || window.webkitAudioContext)(),
@@ -23,7 +24,7 @@ if($audio){
 	    sound,
 	    loop = true,
 	    pannner = audioContext.createStereoPanner();	
-}
+}*/
 init();
 animate();
 
@@ -34,21 +35,21 @@ document.addEventListener('touchstart', onDocumentMouseDown, false);
 document.addEventListener('mouseup', onDocumentMouseUp, false);
 document.addEventListener('touchend', onDocumentMouseUp, false);
 
-$('#mute').click(function(){
+/*$('#mute').click(function(){
 	if($body.hasClass('muted')){
-		loadSound('assets/audio/loop.mp3');
+		playSound();
 		$body.removeClass('muted');
 	} else{
-		sound.stop();
+		stopSound();
 		$body.addClass('muted');
 	}
-})
+});*/
 
 function init() {
-	if($audio){
+	/*if($audio){
 		$body.addClass('audio');
 		loadSound('assets/audio/loop.mp3');
-	}
+	}*/
 	container = document.createElement( 'div' );
 	document.body.appendChild( container );
 	camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 5000 );
@@ -144,13 +145,13 @@ function onDocumentMouseDown(event) {
 	model.scale.set(4,4,4);
 	$enableMove= true;
 	$body.addClass('pressed');
-	if($audio){sound.playbackRate.value = 1;}
+	//if($audio){sound.playbackRate.value = 1;}
 }
 function onDocumentMouseMove(event) {
 	mouseX = ( event.clientX - windowHalfX )*3;
 	mouseY = ( event.clientY - windowHalfY )*3;
 	if($enableMove && $audio){
-		sound.detune.value = ( event.clientY - windowHalfY )/2;
+		//sound.detune.value = ( event.clientY - windowHalfY )/2;
 	}
 }
 function onDocumentMouseUp(event){
@@ -163,8 +164,8 @@ function onDocumentMouseUp(event){
 	camera.position.z = 3000;		
 	$body.removeClass('pressed');
 	if($audio){
-		sound.playbackRate.value = 0.25;
-		sound.detune.value = 0;
+		//sound.playbackRate.value = 0.25;
+		//sound.detune.value = 0;
 	}
 }
 
@@ -175,22 +176,16 @@ THREE.DefaultLoadingManager.onProgress = function ( item, loaded, total ) {
     }
 };
 function animate() {
-
-	requestAnimationFrame( animate );
-	
+	requestAnimationFrame( animate );	
 	if($mesh){
 		$m++;
 		if($m > 2){
 			model.rotation.y -= $speed;
-
 		} 
 	} 
-
 	render();
-
 }
 function render() {
-
 	var timer = -0.0002 * Date.now();
 	if($enableMove){
 		camera.position.x += ( mouseX - camera.position.x );
@@ -199,8 +194,7 @@ function render() {
 	camera.lookAt( scene.position );
 	composer.render( scene, camera );
 }
-// function to load sounds via AJAX
-function loadSound(url) {
+/*function loadSound(url) {
     var request = new XMLHttpRequest();
     request.open('GET', url, true);
     request.responseType = 'arraybuffer';
@@ -209,19 +203,11 @@ function loadSound(url) {
         audioContext.decodeAudioData(request.response, function (buffer) {
             var soundLength = buffer.duration;
             sampleBuffer = buffer;
-            //loopStart.setAttribute('max', Math.floor(soundLength));
-            //loopEnd.setAttribute('max', Math.floor(soundLength));
-            //playButton.disabled = false;
-            //playButton.innerHTML = 'play';
             playSound();
-
         });
     };
-
     request.send();
 }
-
-// set our sound buffer, loop, and connect to destination
 function setupSound() {
     sound = audioContext.createBufferSource();
     sound.buffer = sampleBuffer;
@@ -232,19 +218,13 @@ function setupSound() {
     sound.connect(audioContext.destination);
 	sound.playbackRate.value = 0.2;
 }
-
-// play sound and enable / disable buttons
 function playSound() {
     setupSound();
     sound.start(0);
-
 }
-// stop sound and enable / disable buttons
 function stopSound() {
     sound.stop(0);
 }
-
-// change playback speed/rate
 function changeRate(rate) {
     sound.playbackRate.value = rate;
 }
@@ -261,7 +241,6 @@ function loopOn(event){
         }
     }
 }
-/* ios enable sound output */
 window.addEventListener('touchstart', function(){
 	if($audio){
 		//create empty buffer
@@ -271,4 +250,4 @@ window.addEventListener('touchstart', function(){
 		source.connect(audioContext.destination);
 		source.start(0);
 	}
-}, false);
+}, false);*/
