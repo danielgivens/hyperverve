@@ -15,6 +15,11 @@ $mesh = false;
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 $enableMove= false;
+var audioContext = new(window.AudioContext || window.webkitAudioContext)(),
+    sampleBuffer, 
+    sound,
+    loop = true,
+    pannner = audioContext.createStereoPanner();
 
 init();
 animate();
@@ -27,11 +32,16 @@ document.addEventListener('touchstart', onDocumentMouseDown, false);
 document.addEventListener('mouseup', onDocumentMouseUp, false);
 document.addEventListener('touchend', onDocumentMouseUp, false);
 
-var audioContext = new(window.AudioContext || window.webkitAudioContext)(),
-    sampleBuffer, 
-    sound,
-    loop = true,
-    pannner = audioContext.createStereoPanner();
+$('#mute').click(function(){
+	if($body.hasClass('muted')){
+		loadSound('assets/audio/loop.mp3');
+		$body.removeClass('muted');
+	} else{
+		sound.stop();
+		$body.addClass('muted');
+	}
+})
+
 
 function init() {
 	loadSound('assets/audio/loop.mp3');

@@ -33,6 +33,25 @@ nav{
 		margin-left: 30px;		
 	}
 }
+#mute{
+	position:absolute;
+	bottom:60px;
+	left:60px;
+	color:white;
+	text-decoration: none;
+	text-transform: uppercase;
+	font-family:'Grotesque MT', sans-serif;
+	font-size: 10px;
+	letter-spacing: 2px;
+	writing-mode: vertical-lr;
+	cursor: pointer;
+	@include transform(rotate(180deg));
+}
+.muted{
+	#mute{
+		text-decoration: line-through;
+	}
+}
 .pressed{
 	#logo,
 	nav{
