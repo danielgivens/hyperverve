@@ -170,8 +170,8 @@ function onDocumentMouseDown(event) {
 	if($audio){sound.playbackRate.value = 1;}
 }
 function onDocumentMouseMove(event) {
-		mouseX = ( event.clientX - windowHalfX )*3;
-		mouseY = ( event.clientY - windowHalfY )*3;
+	mouseX = ( event.clientX - windowHalfX )*3;
+	mouseY = ( event.clientY - windowHalfY )*3;
 	if($enableMove && $audio){
 		sound.detune.value = ( event.clientY - windowHalfY )/2;
 	}
@@ -215,19 +215,12 @@ function animate() {
 function render() {
 
 	var timer = -0.0002 * Date.now();
-	//pointLight.position.x = 1500 * Math.cos( timer );
-	//pointLight.position.z = 1500 * Math.sin( timer );
 	if($enableMove){
 		camera.position.x += ( mouseX - camera.position.x );
 		camera.position.y += ( - mouseY - camera.position.y );
-		//camera.position.x = window.innerWidth * 12;
-		//camera.position.z = 500;
-		//console.log(camera.position.x +', '+camera.position.y);
 	}
 	camera.lookAt( scene.position );
-
 	composer.render( scene, camera );
-
 }
 // function to load sounds via AJAX
 function loadSound(url) {
@@ -291,22 +284,3 @@ function loopOn(event){
         }
     }
 }
-
-// change loopStart
-function setLoopStart(start) {
-    sound.loopStart = start;
-}
-
-// change loopEnd
-function setLoopEnd(end) {
-    sound.loopEnd = end;
-}
-/* ios enable sound output */
-window.addEventListener('touchstart', function(){
-	//create empty buffer
-	var buffer = audioContext.createBuffer(1, 1, 22050);
-	var source = audioContext.createBufferSource();
-	source.buffer = buffer;
-	source.connect(audioContext.destination);
-	source.start(0);
-}, false);
