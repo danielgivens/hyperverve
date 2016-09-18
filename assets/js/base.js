@@ -41,7 +41,9 @@ document.addEventListener('mousedown', onDocumentMouseDown, false);
 document.addEventListener('touchstart', onDocumentMouseDown, false);
 document.addEventListener('mouseup', onDocumentMouseUp, false);
 document.addEventListener('touchend', onDocumentMouseUp, false);
-
+document.addEventListener('touchmove', function(e){
+    e.preventDefault();
+}, false);
 $('#mute').click(function(){
 	if($body.hasClass('muted')){
 		playSound();
