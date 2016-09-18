@@ -41,7 +41,9 @@ document.addEventListener('mousedown', onDocumentMouseDown, false);
 document.addEventListener('touchstart', onDocumentMouseDown, false);
 document.addEventListener('mouseup', onDocumentMouseUp, false);
 document.addEventListener('touchend', onDocumentMouseUp, false);
-
+document.addEventListener('touchmove', function(e){
+    e.preventDefault();
+}, false);
 $('#mute').click(function(){
 	if($body.hasClass('muted')){
 		playSound();
@@ -61,7 +63,7 @@ function init() {
 	document.body.appendChild( container );
 	camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 5000 );
 	camera.position.z = 3000;
-	var path = "assets/images/cube/hv/";
+	var path = "assets/images/cube/";
 	var format = '.png';
 	var urls = [
 		path + 'posx' + format, path + 'posx' + format,
