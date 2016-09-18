@@ -15,6 +15,7 @@ $mesh = false;
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 $enableMove= false;
+
 init();
 animate();
 
@@ -26,7 +27,14 @@ document.addEventListener('touchstart', onDocumentMouseDown, false);
 document.addEventListener('mouseup', onDocumentMouseUp, false);
 document.addEventListener('touchend', onDocumentMouseUp, false);
 
+var audioContext = new(window.AudioContext || window.webkitAudioContext)(),
+    sampleBuffer, 
+    sound,
+    loop = true,
+    pannner = audioContext.createStereoPanner();
+
 function init() {
+	loadSound('assets/audio/loop.mp3');
 	container = document.createElement( 'div' );
 	document.body.appendChild( container );
 	camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 5000 );
@@ -37,9 +45,9 @@ function init() {
 	var path = "assets/images/cube/hv/";
 	var format = '.png';
 	var urls = [
-			path + 'posy' + format, path + 'negy' + format,
-			path + 'posx' + format, path + 'negx' + format,
-			path + 'negz' + format, path + 'posz' + format
+			path + 'posx' + format, path + 'posx' + format,
+			path + 'posx' + format, path + 'posx' + format,
+			path + 'posx' + format, path + 'posz' + format
 		];
 
 	var reflectionCube = new THREE.CubeTextureLoader().load( urls );
@@ -102,6 +110,7 @@ function init() {
 	glitchPass.renderToScreen = true;
 	composer.addPass( glitchPass );
 	window.addEventListener( 'resize', onWindowResize, false );
+
 }
 
 function onWindowResize() {
@@ -144,14 +153,13 @@ function onDocumentMouseDown(event) {
 	$enableMove= true;
 	//reflectionCube.rotation.set(0,2,0);
 	$body.addClass('pressed');
+	 sound.playbackRate.value = 1;
 }
 function onDocumentMouseMove(event) {
+		mouseX = ( event.clientX - windowHalfX )*3;
+		mouseY = ( event.clientY - windowHalfY )*3;
 	if($enableMove){
-		mouseX = ( event.clientX - windowHalfX ) * 4;
-		mouseY = ( event.clientY - windowHalfY ) * 4;
-		if($mesh){
-
-		}
+		sound.detune.value = ( event.clientY - windowHalfY )/2;
 	}
 }
 function onDocumentMouseUp(event){
@@ -163,6 +171,8 @@ function onDocumentMouseUp(event){
 	camera.position.y = 0;
 	camera.position.z = 3000;		
 	$body.removeClass('pressed');
+	sound.playbackRate.value = 0.25;
+	sound.detune.value = 0;
 }
 
 //
@@ -179,6 +189,7 @@ function animate() {
 		$m++;
 		if($m > 2){
 			model.rotation.y -= $speed;
+
 		} 
 	} 
 
@@ -191,12 +202,96 @@ function render() {
 	//pointLight.position.x = 1500 * Math.cos( timer );
 	//pointLight.position.z = 1500 * Math.sin( timer );
 	if($enableMove){
-		camera.position.x += ( mouseX - camera.position.x ) *2;
-		camera.position.y += ( - mouseY - camera.position.y ) *2;
-		//console.log((mouseX - camera.position.x ) * .05);
+		camera.position.x += ( mouseX - camera.position.x );
+		camera.position.y += ( - mouseY - camera.position.y );
+		//camera.position.x = window.innerWidth * 12;
+		//camera.position.z = 500;
+		//console.log(camera.position.x +', '+camera.position.y);
 	}
 	camera.lookAt( scene.position );
 
 	composer.render( scene, camera );
 
 }
+// function to load sounds via AJAX
+function loadSound(url) {
+    var request = new XMLHttpRequest();
+    request.open('GET', url, true);
+    request.responseType = 'arraybuffer';
+
+    request.onload = function () {
+        audioContext.decodeAudioData(request.response, function (buffer) {
+            var soundLength = buffer.duration;
+            sampleBuffer = buffer;
+            //loopStart.setAttribute('max', Math.floor(soundLength));
+            //loopEnd.setAttribute('max', Math.floor(soundLength));
+            //playButton.disabled = false;
+            //playButton.innerHTML = 'play';
+            console.log(soundLength);
+            playSound();
+
+        });
+    };
+
+    request.send();
+}
+
+// set our sound buffer, loop, and connect to destination
+function setupSound() {
+    sound = audioContext.createBufferSource();
+    sound.buffer = sampleBuffer;
+    sound.loop = loop;
+    sound.loopStart = 0;
+    sound.loopEnd = sampleBuffer.duration;
+    //sound.detune.value = -1000;
+    sound.connect(audioContext.destination);
+	sound.playbackRate.value = 0.2;
+}
+
+// play sound and enable / disable buttons
+function playSound() {
+    setupSound();
+    sound.start(0);
+
+}
+// stop sound and enable / disable buttons
+function stopSound() {
+    sound.stop(0);
+}
+
+// change playback speed/rate
+function changeRate(rate) {
+    sound.playbackRate.value = rate;
+}
+
+function loopOn(event){
+    loop = event.target.checked;
+    if(sound){ // sound needs to be set before setting loop points
+        if(loop){
+            loopStart.disabled = false;
+            loopEnd.disabled = false;
+        } else {
+            loopStart.disabled = true;
+            loopEnd.disabled = true;   
+        }
+    }
+}
+
+// change loopStart
+function setLoopStart(start) {
+    sound.loopStart = start;
+}
+
+// change loopEnd
+function setLoopEnd(end) {
+    sound.loopEnd = end;
+}
+/* ios enable sound output */
+window.addEventListener('touchstart', function(){
+	//create empty buffer
+	var buffer = audioContext.createBuffer(1, 1, 22050);
+	var source = audioContext.createBufferSource();
+	source.buffer = buffer;
+	source.connect(audioContext.destination);
+	source.start(0);
+}, false);
