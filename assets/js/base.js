@@ -15,13 +15,16 @@ $mesh = false;
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 $enableMove= false;
-var audioContext = new(window.AudioContext || window.webkitAudioContext)(),
-    sampleBuffer, 
-    sound,
-    loop = true,
-    pannner = audioContext.createStereoPanner();
+
 var a = document.createElement('audio');
 $audio = !!(a.canPlayType && a.canPlayType('audio/mpeg;').replace(/no/, ''));
+if($audio){
+	var audioContext = new(window.AudioContext || window.webkitAudioContext)(),
+	    sampleBuffer, 
+	    sound,
+	    loop = true,
+	    pannner = audioContext.createStereoPanner();	
+}
 init();
 animate();
 
@@ -284,3 +287,14 @@ function loopOn(event){
         }
     }
 }
+/* ios enable sound output */
+window.addEventListener('touchstart', function(){
+	if($audio){
+		//create empty buffer
+		var buffer = audioContext.createBuffer(1, 1, 22050);
+		var source = audioContext.createBufferSource();
+		source.buffer = buffer;
+		source.connect(audioContext.destination);
+		source.start(0);
+	}
+}, false);
