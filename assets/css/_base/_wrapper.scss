@@ -29,8 +29,9 @@ nav{
 		font-family:'Grotesque MT', sans-serif;
 		font-weight:bold;
 		line-height: 60px;
-		font-size: 15px;
-		margin-left: 30px;		
+		font-size: 10px;
+		letter-spacing: 2px;
+		margin-left: 15px;		
 	}
 }
 #mute{
@@ -45,16 +46,26 @@ nav{
 	letter-spacing: 2px;
 	writing-mode: vertical-lr;
 	cursor: pointer;
+	display: none;
 	@include transform(rotate(180deg));
+}
+.audio{
+	#mute{
+		display: block;
+	}
 }
 .muted{
 	#mute{
 		text-decoration: line-through;
 	}
 }
-.pressed{
-	#logo,
+@include breakpoint(mobile){
+	#logo{
+		left:30px;
+		top:30px;
+	}
 	nav{
-		//display: none;
+		top:30px;
+		right:30px;
 	}
 }
