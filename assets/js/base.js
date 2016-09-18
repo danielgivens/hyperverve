@@ -1,7 +1,5 @@
 var container, stats;
-
 var camera, scene, renderer;
-
 var mesh, geometry, model;
 $body = $('body');
 var loader;
@@ -16,26 +14,25 @@ var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 $enableMove= false;
 $audio = false;
-/*var a = document.createElement('audio');
+var a = document.createElement('audio');
 $audio = !!(a.canPlayType && a.canPlayType('audio/mpeg;').replace(/no/, ''));
+alert($audio);
 if($audio){
 	var audioContext = new(window.AudioContext || window.webkitAudioContext)(),
 	    sampleBuffer, 
 	    sound,
 	    loop = true,
 	    pannner = audioContext.createStereoPanner();	
-}*/
+}
 init();
 animate();
-
-
 document.addEventListener('mousemove', onDocumentMouseMove, false);
 document.addEventListener('mousedown', onDocumentMouseDown, false);
 document.addEventListener('touchstart', onDocumentMouseDown, false);
 document.addEventListener('mouseup', onDocumentMouseUp, false);
 document.addEventListener('touchend', onDocumentMouseUp, false);
 
-/*$('#mute').click(function(){
+$('#mute').click(function(){
 	if($body.hasClass('muted')){
 		playSound();
 		$body.removeClass('muted');
@@ -43,13 +40,13 @@ document.addEventListener('touchend', onDocumentMouseUp, false);
 		stopSound();
 		$body.addClass('muted');
 	}
-});*/
+});
 
 function init() {
-	/*if($audio){
+	if($audio){
 		$body.addClass('audio');
 		loadSound('assets/audio/loop.mp3');
-	}*/
+	}
 	container = document.createElement( 'div' );
 	document.body.appendChild( container );
 	camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 5000 );
@@ -57,10 +54,10 @@ function init() {
 	var path = "assets/images/cube/hv/";
 	var format = '.png';
 	var urls = [
-			path + 'posx' + format, path + 'posx' + format,
-			path + 'posx' + format, path + 'posx' + format,
-			path + 'posx' + format, path + 'posz' + format
-		];
+		path + 'posx' + format, path + 'posx' + format,
+		path + 'posx' + format, path + 'posx' + format,
+		path + 'posx' + format, path + 'posz' + format
+	];
 
 	var reflectionCube = new THREE.CubeTextureLoader().load( urls );
 	reflectionCube.format = THREE.RGBFormat;
@@ -68,21 +65,11 @@ function init() {
 	scene = new THREE.Scene();
 	scene.background = reflectionCube;
 
-	// LIGHTS
-
 	var ambient = new THREE.AmbientLight( 0xffffff );
 	scene.add( ambient );
 
 	pointLight = new THREE.PointLight( 0xffffff, 2 );
 	scene.add( pointLight );
-
-	// light representation
-
-	//var sphere = new THREE.SphereGeometry( 100, 16, 8 );
-
-	//var mesh = new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0xffaa00 } ) );
-	//mesh.scale.set( 0.05, 0.05, 0.05 );
-	//pointLight.add( mesh );
 
 	var refractionCube = new THREE.CubeTextureLoader().load( urls );
 	refractionCube.mapping = THREE.CubeRefractionMapping;
@@ -91,7 +78,6 @@ function init() {
 	var cubeMaterial3 = new THREE.MeshLambertMaterial( { color: 0xff6600, envMap: reflectionCube, combine: THREE.MixOperation, reflectivity: 0.3 } );
 	var cubeMaterial2 = new THREE.MeshLambertMaterial( { color: 0xffffff, envMap: refractionCube, refractionRatio: 0.95 } );
 	var cubeMaterial1 = new THREE.MeshLambertMaterial( { color: 0xffffff, envMap: reflectionCube } );
-	//
 
 	renderer = new THREE.WebGLRenderer();
 	renderer.setPixelRatio( window.devicePixelRatio );
@@ -111,11 +97,8 @@ function init() {
 	glitchPass.renderToScreen = true;
 	composer.addPass( glitchPass );
 	window.addEventListener( 'resize', onWindowResize, false );
-
 }
-
 function onWindowResize() {
-
 	windowHalfX = window.innerWidth / 2;
 	windowHalfY = window.innerHeight / 2;
 
@@ -145,14 +128,23 @@ function onDocumentMouseDown(event) {
 	model.scale.set(4,4,4);
 	$enableMove= true;
 	$body.addClass('pressed');
-	//if($audio){sound.playbackRate.value = 1;}
+	if($audio && sound){sound.playbackRate.value = 1;}
 }
 function onDocumentMouseMove(event) {
 	mouseX = ( event.clientX - windowHalfX )*3;
 	mouseY = ( event.clientY - windowHalfY )*3;
-	if($enableMove && $audio){
-		//sound.detune.value = ( event.clientY - windowHalfY )/2;
+	if($enableMove && $audio && sound){
+		sound.detune.value = ( event.clientY - windowHalfY )/2;
 	}
+	e=event;
+	pauseEvent(e);	
+}
+function pauseEvent(e){
+    if(e.stopPropagation) e.stopPropagation();
+    if(e.preventDefault) e.preventDefault();
+    e.cancelBubble=true;
+    e.returnValue=false;
+    return false;
 }
 function onDocumentMouseUp(event){
 	$speed = 0.005;
@@ -163,16 +155,14 @@ function onDocumentMouseUp(event){
 	camera.position.y = 0;
 	camera.position.z = 3000;		
 	$body.removeClass('pressed');
-	if($audio){
-		//sound.playbackRate.value = 0.25;
-		//sound.detune.value = 0;
+	if($audio && sound){
+		sound.playbackRate.value = 0.25;
+		sound.detune.value = 0;
 	}
 }
-
 THREE.DefaultLoadingManager.onProgress = function ( item, loaded, total ) {
     if(loaded === total){
 	    $mesh = true;
-	    alert('test');
     }
 };
 function animate() {
@@ -194,7 +184,7 @@ function render() {
 	camera.lookAt( scene.position );
 	composer.render( scene, camera );
 }
-/*function loadSound(url) {
+function loadSound(url) {
     var request = new XMLHttpRequest();
     request.open('GET', url, true);
     request.responseType = 'arraybuffer';
@@ -214,7 +204,6 @@ function setupSound() {
     sound.loop = loop;
     sound.loopStart = 0;
     sound.loopEnd = sampleBuffer.duration;
-    //sound.detune.value = -1000;
     sound.connect(audioContext.destination);
 	sound.playbackRate.value = 0.2;
 }
@@ -225,29 +214,3 @@ function playSound() {
 function stopSound() {
     sound.stop(0);
 }
-function changeRate(rate) {
-    sound.playbackRate.value = rate;
-}
-
-function loopOn(event){
-    loop = event.target.checked;
-    if(sound){ // sound needs to be set before setting loop points
-        if(loop){
-            loopStart.disabled = false;
-            loopEnd.disabled = false;
-        } else {
-            loopStart.disabled = true;
-            loopEnd.disabled = true;   
-        }
-    }
-}
-window.addEventListener('touchstart', function(){
-	if($audio){
-		//create empty buffer
-		var buffer = audioContext.createBuffer(1, 1, 22050);
-		var source = audioContext.createBufferSource();
-		source.buffer = buffer;
-		source.connect(audioContext.destination);
-		source.start(0);
-	}
-}, false);*/
