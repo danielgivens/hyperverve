@@ -6,7 +6,7 @@ body {
 	position: relative;
 	margin: 0;
 	padding: 0;
-	background: black;
+	background: #191919;
 	overflow: hidden;
 }
 #logo{
@@ -26,10 +26,10 @@ nav{
 		color:white;
 		text-decoration: none;
 		text-transform: uppercase;
-		font-family:$sans;
-		font-weight:700;
+		font-family:$narrow;
+		font-weight:bold;
 		line-height: 60px;
-		font-size: 12px;
+		font-size: 10px;
 		letter-spacing: 2px;
 		margin-left: 15px;		
 	}
@@ -41,9 +41,8 @@ nav{
 	color:white;
 	text-decoration: none;
 	text-transform: uppercase;
-	font-family:$narrow;
 	font-size: 10px;
-	letter-spacing: 3px;
+	letter-spacing: 2px;
 	writing-mode: vertical-lr;
 	cursor: pointer;
 	display: none;
@@ -67,8 +66,5 @@ nav{
 	nav{
 		top:30px;
 		right:30px;
-		a{
-			font-size: 10px;
-		}
 	}
 }
