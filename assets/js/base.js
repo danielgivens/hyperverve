@@ -154,7 +154,7 @@ function onDocumentMouseDown(event) {
 	$body.addClass('pressed');
 	//camera.position.x = 3000 * Math.cos( .01 );  
 	camera.position.z = 4000 * Math.cos( .01 );	
-	if($audio && sound){sound.playbackRate.value = 1;}
+	if($audio && sound){sound.playbackRate.value = 0.7;}
 	}
 }
 //tween.start();
@@ -221,7 +221,7 @@ function onDocumentMouseUp(event){
 	camera.position.z = 3000;		
 	$body.removeClass('pressed');
 	if($audio && sound){
-		sound.playbackRate.value = 0.25;
+		sound.playbackRate.value = 1;
 		sound.detune.value = 0;
 	}
 }
@@ -280,7 +280,7 @@ function setupSound() {
     sound.loopStart = 0;
     sound.loopEnd = sampleBuffer.duration;
     sound.connect(audioContext.destination);
-	sound.playbackRate.value = 0.2;
+	sound.playbackRate.value = 1;
 }
 function playSound() {
     setupSound();
