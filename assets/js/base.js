@@ -235,6 +235,8 @@ function onDocumentMouseUp(event){
 	camera.position.x = 0;
 	camera.position.y = 0;
 	camera.position.z = 3000;	
+	model.rotation.x = 0;
+	model.rotation.z = 0;
 	$interior = false;	
 	$body.removeClass('pressed');
 	if($audio && sound){
@@ -252,7 +254,7 @@ function animate() {
 	requestAnimationFrame( animate );	
 	if($mesh){
 		$m++;
-		if($m > 2 && isMobile){
+		if($m > 2){
 			model.rotation.y -= $speed;
 		} 
 	} 
@@ -263,19 +265,19 @@ var angle = 0;
 var radius = 3000; 
 function render() {
 	var timer = -0.0002 * Date.now();
-	if($mesh && $m > 2 && !isMobile){
-		model.rotation.z = (mouseY - model.rotation.z) *0.001;
-		model.rotation.y = (mouseX - model.rotation.y) *0.001;
-		model.rotation.x = (mouseY - model.rotation.x) *0.001;
+	if($mesh && $m > 2){
+		//model.rotation.z -= (mouseY - model.rotation.z) *0.00001;
+		model.rotation.y -= (mouseX - model.rotation.y) *0.00001;
+		//model.rotation.x -= (mouseY - model.rotation.x) *0.00001;
 
 	}
 	if($enableMove){
 		//console.log(camera.position.x);
 		if(!isMobile){
 			if($interior){
-				model.rotation.z = (mouseY - model.rotation.z) *0.001;
-				model.rotation.y = (mouseX - model.rotation.y) *0.001;
-				model.rotation.x = (mouseY - model.rotation.x) *0.001;
+				//model.rotation.z = (mouseY - model.rotation.z) *0.001;
+				//model.rotation.y = (mouseX - model.rotation.y) *0.001;
+				//model.rotation.x = (mouseY - model.rotation.x) *0.001;
 			} else{
 				camera.position.x += ( mouseX - camera.position.x );
 				camera.position.y += ( - mouseY - camera.position.y );
