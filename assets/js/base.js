@@ -162,10 +162,10 @@ function onDocumentMouseDown(event) {
 //tween.start();
 function onAboutClick(event) {
 	$enableMove= false;
-	var tween1 = new TWEEN.Tween( model.scale ).to( { x:6,y:6,z:6 }, 1500 ).easing( TWEEN.Easing.Exponential.InOut );
+	var tween1 = new TWEEN.Tween( model.scale ).to( { x:6,y:6,z:6 }, 600 ).easing( TWEEN.Easing.Exponential.InOut );
 	//var tween3 = new TWEEN.Tween( model.rotation ).to( { y:(mouseX - model.rotation.y) *0.001,z:(mouseY - model.rotation.z) *0.001,y:0 }, 1500 ).easing( TWEEN.Easing.Exponential.InOut );
 	//var tween4 = new TWEEN.Tween( model.position ).to( { z:-1000 }, 3000 ).easing( TWEEN.Easing.Exponential.InOut );
-	var tween2 = new TWEEN.Tween( camera.position ).to( { x:1500,y:0,z:10 }, 1500 ).easing( TWEEN.Easing.Exponential.InOut );
+	var tween2 = new TWEEN.Tween( camera.position ).to( { x:1500,y:0,z:10 }, 600 ).easing( TWEEN.Easing.Exponential.InOut );
 	glitchPass.goWild = false;
 	//$speed =0;
 	//model.scale.set(6,6,6);
@@ -186,10 +186,10 @@ function onAboutClick(event) {
 	});
 }
 function onContactClick(event) {
-	var tween1 = new TWEEN.Tween( model.scale ).to( { x:6,y:6,z:6 }, 1500 ).easing( TWEEN.Easing.Exponential.InOut );
+	var tween1 = new TWEEN.Tween( model.scale ).to( { x:6,y:6,z:6 }, 600 ).easing( TWEEN.Easing.Exponential.InOut );
 	//var tween3 = new TWEEN.Tween( model.rotation ).to( { y:(mouseX - model.rotation.y) *0.001,z:(mouseY - model.rotation.z) *0.001,y:0 }, 1500 ).easing( TWEEN.Easing.Exponential.InOut );
 	//var tween4 = new TWEEN.Tween( model.position ).to( { z:-1000 }, 3000 ).easing( TWEEN.Easing.Exponential.InOut );
-	var tween2 = new TWEEN.Tween( camera.position ).to( { x:-1500,y:0,z:10 }, 1500 ).easing( TWEEN.Easing.Exponential.InOut );
+	var tween2 = new TWEEN.Tween( camera.position ).to( { x:-1500,y:0,z:10 }, 600 ).easing( TWEEN.Easing.Exponential.InOut );
 	glitchPass.goWild = false;
 	//$speed =0;
 	//model.scale.set(6,6,6);
@@ -267,7 +267,7 @@ function render() {
 	var timer = -0.0002 * Date.now();
 	if($mesh && $m > 2){
 		//model.rotation.z -= (mouseY - model.rotation.z) *0.00001;
-		model.rotation.y -= (mouseX - model.rotation.y) *0.00001;
+		model.rotation.y -= (mouseX - model.rotation.y) *0.000005;
 		//model.rotation.x -= (mouseY - model.rotation.x) *0.00001;
 
 	}
