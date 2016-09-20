@@ -56,7 +56,7 @@ THREE.GlitchPass.prototype = Object.assign( Object.create( THREE.Pass.prototype 
 			this.curF = 0;
 			this.generateTrigger();
 		} else if ( this.goWild == false ) {
-			this.uniforms[ 'amount' ].value = 0.001;
+			this.uniforms[ 'amount' ].value = 0.002;
 			this.uniforms[ 'angle' ].value = 0;
 			this.uniforms[ 'distortion_x' ].value = -10.001;
 			this.uniforms[ 'distortion_y' ].value = -10.001;

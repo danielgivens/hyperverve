@@ -10,6 +10,7 @@ $speed = 0.005;
 var mouseX = 0;
 var mouseY = 0;
 $mesh = false;
+$interior = false;
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 $enableMove= false;
@@ -151,6 +152,7 @@ function onDocumentMouseDown(event) {
 	$speed = -.025;
 	model.scale.set(6,6,6);
 	$enableMove= true;
+	$interior = false;
 	$body.addClass('pressed');
 	//camera.position.x = 3000 * Math.cos( .01 );  
 	camera.position.z = 4000 * Math.cos( .01 );	
@@ -159,14 +161,14 @@ function onDocumentMouseDown(event) {
 }
 //tween.start();
 function onAboutClick(event) {
-	var tween1 = new TWEEN.Tween( model.scale ).to( { x:4,y:4,z:4 }, 3000 ).easing( TWEEN.Easing.Exponential.InOut );
-	//var tween3 = new TWEEN.Tween( model.rotation ).to( { x:-4,z:4,y:4 }, 3000 ).easing( TWEEN.Easing.Exponential.InOut );
+	$enableMove= false;
+	var tween1 = new TWEEN.Tween( model.scale ).to( { x:6,y:6,z:6 }, 1500 ).easing( TWEEN.Easing.Exponential.InOut );
+	//var tween3 = new TWEEN.Tween( model.rotation ).to( { y:(mouseX - model.rotation.y) *0.001,z:(mouseY - model.rotation.z) *0.001,y:0 }, 1500 ).easing( TWEEN.Easing.Exponential.InOut );
 	//var tween4 = new TWEEN.Tween( model.position ).to( { z:-1000 }, 3000 ).easing( TWEEN.Easing.Exponential.InOut );
-	var tween2 = new TWEEN.Tween( camera.position ).to( { x:1500,y:0,z:10 }, 3000 ).easing( TWEEN.Easing.Exponential.InOut );
+	var tween2 = new TWEEN.Tween( camera.position ).to( { x:1500,y:0,z:10 }, 1500 ).easing( TWEEN.Easing.Exponential.InOut );
 	glitchPass.goWild = false;
 	//$speed =0;
 	//model.scale.set(6,6,6);
-	$enableMove= false;
 	$body.addClass('pressed');
 	tween1.start();
 	//tween3.start();
@@ -174,13 +176,20 @@ function onAboutClick(event) {
 	tween2.onComplete(function() {
 	  //glitchPass.goWild = false;
 	  //pointLight.intensity = 0;
+	  if(!isMobile){
+		  $speed = 0;
+		  
+	  }
+	  $enableMove= true;
+	  $interior = true;
+
 	});
 }
 function onContactClick(event) {
-	var tween1 = new TWEEN.Tween( model.scale ).to( { x:4,y:4,z:4 }, 3000 ).easing( TWEEN.Easing.Exponential.InOut );
-	//var tween3 = new TWEEN.Tween( model.rotation ).to( { x:4,z:4,y:-4 }, 3000 ).easing( TWEEN.Easing.Exponential.InOut );
+	var tween1 = new TWEEN.Tween( model.scale ).to( { x:6,y:6,z:6 }, 1500 ).easing( TWEEN.Easing.Exponential.InOut );
+	//var tween3 = new TWEEN.Tween( model.rotation ).to( { y:(mouseX - model.rotation.y) *0.001,z:(mouseY - model.rotation.z) *0.001,y:0 }, 1500 ).easing( TWEEN.Easing.Exponential.InOut );
 	//var tween4 = new TWEEN.Tween( model.position ).to( { z:-1000 }, 3000 ).easing( TWEEN.Easing.Exponential.InOut );
-	var tween2 = new TWEEN.Tween( camera.position ).to( { x:-1500,y:0,z:10 }, 3000 ).easing( TWEEN.Easing.Exponential.InOut );
+	var tween2 = new TWEEN.Tween( camera.position ).to( { x:-1500,y:0,z:10 }, 1500 ).easing( TWEEN.Easing.Exponential.InOut );
 	glitchPass.goWild = false;
 	//$speed =0;
 	//model.scale.set(6,6,6);
@@ -192,14 +201,21 @@ function onContactClick(event) {
 	tween2.onComplete(function() {
 	  //glitchPass.goWild = false;
 	  //pointLight.intensity = 0;
+	  if(!isMobile){
+		  $speed = 0;
+		  
+	  }
+	  $enableMove= true;
+	  $interior = true;
+
 	});
 }
 function onDocumentMouseMove(event) {
 	mouseX = ( event.clientX - windowHalfX )*3;
 	mouseY = ( event.clientY - windowHalfY )*3;
-	if($enableMove && $audio && sound){
+	if($enableMove && $audio && sound && !$interior){
 		sound.detune.value = ( event.clientY - windowHalfY )/2;
-	}
+	} 
 	
 	e=event;
 	pauseEvent(e);	
@@ -218,7 +234,8 @@ function onDocumentMouseUp(event){
 	model.scale.set(1,1,1);
 	camera.position.x = 0;
 	camera.position.y = 0;
-	camera.position.z = 3000;		
+	camera.position.z = 3000;	
+	$interior = false;	
 	$body.removeClass('pressed');
 	if($audio && sound){
 		sound.playbackRate.value = 1;
@@ -235,7 +252,7 @@ function animate() {
 	requestAnimationFrame( animate );	
 	if($mesh){
 		$m++;
-		if($m > 2){
+		if($m > 2 && isMobile){
 			model.rotation.y -= $speed;
 		} 
 	} 
@@ -246,13 +263,28 @@ var angle = 0;
 var radius = 3000; 
 function render() {
 	var timer = -0.0002 * Date.now();
-	if($enableMove){
-		camera.position.x += ( mouseX - camera.position.x );
-		camera.position.y += ( - mouseY - camera.position.y );
-		console.log(camera.position.x);
+	if($mesh && $m > 2 && !isMobile){
+		model.rotation.z = (mouseY - model.rotation.z) *0.001;
+		model.rotation.y = (mouseX - model.rotation.y) *0.001;
+		model.rotation.x = (mouseY - model.rotation.x) *0.001;
+
 	}
-	pointLight.position.x += ( mouseX - pointLight.position.x ) * 0.5;
-	pointLight.position.y += ( mouseY - pointLight.position.y ) * 0.5;
+	if($enableMove){
+		//console.log(camera.position.x);
+		if(!isMobile){
+			if($interior){
+				model.rotation.z = (mouseY - model.rotation.z) *0.001;
+				model.rotation.y = (mouseX - model.rotation.y) *0.001;
+				model.rotation.x = (mouseY - model.rotation.x) *0.001;
+			} else{
+				camera.position.x += ( mouseX - camera.position.x );
+				camera.position.y += ( - mouseY - camera.position.y );
+			}			
+		}
+
+	}
+	//pointLight.position.x += ( mouseX - pointLight.position.x ) * 0.5;
+	//pointLight.position.y += ( mouseY - pointLight.position.y ) * 0.5;
 	//camera.position.x = radius * Math.cos( angle );  
 	//camera.position.z = radius * Math.sin( angle );
 	//angle += 0.01;
