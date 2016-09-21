@@ -15,9 +15,9 @@ var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 $enableMove= false;
 $audio = false;
+$playing = false;
 var a = document.createElement('audio');
 $audio = !!(a.canPlayType && a.canPlayType('audio/mpeg;').replace(/no/, ''));
-
 var isMobile = false; //initiate as false
 // device detection
 if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent) 
@@ -28,11 +28,28 @@ if(isMobile){
 } else{
 	$bg = 'posz';
 }
+$ie = false;
+if (document.documentMode || /Edge/.test(navigator.userAgent)) {
+    $ie = true;    
+} else{
+	$ie = false;
+}
+
 if($audio){
 	var audioContext = new(window.AudioContext || window.webkitAudioContext)(),
 	    sampleBuffer, 
 	    sound,
 	    loop = true;
+	var frequencyData;
+	var analyser;
+	if(!$ie){
+		var analyser = audioContext.createAnalyser();
+		analyser.fftSize = 32;
+		var frequencyData = new Uint8Array(analyser.frequencyBinCount);
+		analyser.getByteFrequencyData(frequencyData);
+		//console.log(frequencyData)
+		//analyser.getByteFrequencyData(analyser.frequencyBinCount);
+	}
 }
 init();
 animate();
@@ -84,7 +101,7 @@ function init() {
 	scene = new THREE.Scene();
 	scene.background = reflectionCube;
 
-	var ambient = new THREE.AmbientLight( 0xffffff );
+	var ambient = new THREE.AmbientLight( 0xffffff,0.9 );
 	scene.add( ambient );
 
 	pointLight = new THREE.PointLight( 0xffffff, 0.5 );
@@ -148,15 +165,18 @@ function createScene( geometry, m2 ) {
 }
 function onDocumentMouseDown(event) {
 	if($(event.target).attr('id') != 'about-btn' && $(event.target).attr('id') != 'contact-btn'){
-	glitchPass.goWild = true;
-	$speed = -.025;
-	model.scale.set(6,6,6);
-	$enableMove= true;
-	$interior = false;
-	$body.addClass('pressed');
-	//camera.position.x = 3000 * Math.cos( .01 );  
-	camera.position.z = 4000 * Math.cos( .01 );	
-	if($audio && sound){sound.playbackRate.value = 0.7;}
+		glitchPass.goWild = true;
+		glitchPass.Hits = 0.2;
+		model.traverse( function ( object ) { object.visible = true; } );
+		
+		$speed = -.025;
+		model.scale.set(6,6,6);
+		$enableMove= true;
+		$interior = false;
+		$body.addClass('pressed');
+		//camera.position.x = 3000 * Math.cos( .01 );  
+		camera.position.z = 4000 * Math.cos( .01 );	
+		if($audio && sound){sound.playbackRate.value = 0.7;}
 	}
 }
 //tween.start();
@@ -258,16 +278,34 @@ function animate() {
 			model.rotation.y -= $speed;
 		} 
 	} 
+	if($audio && $playing && !$ie){
+		$c++;
+		//console.log($c+': '+frequencyData);
+		//analyser.getByteFrequencyData(frequencyData);
+		//console.log(frequencyData[0]+', '+frequencyData[1]+', '+frequencyData[2]+', '+frequencyData[3]);		
+	}    
+	
 	TWEEN.update();
 	render();
 }
 var angle = 0;
+$c = 0;
 var radius = 3000; 
 function render() {
 	var timer = -0.0002 * Date.now();
 	if($mesh && $m > 2){
 		//model.rotation.z -= (mouseY - model.rotation.z) *0.00001;
-		model.rotation.y -= (mouseX - model.rotation.y) *0.000005;
+		if($interior){
+			$amount = 0.000001;
+		} else{
+			$amount = 0.00001;
+		}
+		if(mouseX < 0){
+			model.rotation.y -= (mouseX + model.rotation.y) * $amount;		
+		} else{
+			model.rotation.y -= (mouseX - model.rotation.y) * $amount;		
+		}
+		//console.log();
 		//model.rotation.x -= (mouseY - model.rotation.x) *0.00001;
 
 	}
@@ -290,6 +328,7 @@ function render() {
 	//camera.position.x = radius * Math.cos( angle );  
 	//camera.position.z = radius * Math.sin( angle );
 	//angle += 0.01;
+
 	camera.lookAt( scene.position );
 	composer.render( scene, camera );
 }
@@ -297,28 +336,100 @@ function loadSound(url) {
     var request = new XMLHttpRequest();
     request.open('GET', url, true);
     request.responseType = 'arraybuffer';
-
     request.onload = function () {
         audioContext.decodeAudioData(request.response, function (buffer) {
             var soundLength = buffer.duration;
-            sampleBuffer = buffer;
-            playSound();
+           sampleBuffer = buffer;
+           //console.log(buffer);
+           playSound();
         });
     };
     request.send();
 }
+var analyser = audioContext.createAnalyser();
+analyser.fftSize = 32;
+
 function setupSound() {
+	
+
     sound = audioContext.createBufferSource();
     sound.buffer = sampleBuffer;
     sound.loop = loop;
     sound.loopStart = 0;
     sound.loopEnd = sampleBuffer.duration;
-    sound.connect(audioContext.destination);
+    sound.connect(audioContext.destination)
+   
+    sound.connect(analyser);
+    analyser.connect(audioContext.destination);
 	sound.playbackRate.value = 1;
+	$playing = true;
+	console.log(array);
+	//listen();
+
 }
+var $wild;
+window.setInterval(function(){
+	array = new Uint8Array(analyser.frequencyBinCount);
+    analyser.getByteFrequencyData(array); 
+    //console.log(array[0]+', '+array[1]+', '+array[2]+', '+array[3]+', '+array[4]+', '+array[5]+', '+array[6]+', '+array[7]+', '+array[8]);
+    if(array[8] > 130){
+	    if(!$enableMove){
+			glitchPass.goWild = true;
+			$wild = setTimeout(function(){
+				glitchPass.goWild = false;
+			},150);
+		} else{
+			glitchPass.goWild = true;
+			clearTimeout($wild);
+		}
+    } 
+    $brightness = array[6]/100;
+    if($brightness < 0.75){
+	    $brightness = 0.75;
+    }
+    pointLight.intensity = $brightness;
+   // console.log(array[6]/100);
+    if(array[5] > 200){
+	    if(!$interior){
+			model.traverse( function ( object ) { object.visible = false; } );
+		}
+		setTimeout(function(){
+			if(!$interior){
+				model.traverse( function ( object ) { object.visible = true; } );
+			}
+		},150);    
+    }
+    if(array[4] > 220){
+	    if(!$enableMove){
+		    glitchPass.Hits = array[4]/100;
+			//model.rotation.y = model.rotation.y - 0.025;
+		} else{
+			glitchPass.hits = 0.05;
+		}
+    }
+    
+    if(array[2] > 200){
+	    if(!$interior){
+			model.rotation.x -= array[3]/100000; 
+		}
+    } else{
+	   model.rotation.x = 0;
+    }
+    
+    
+    if(array[0] > 245){
+	    if(!$interior){
+			model.rotation.z += array[0]/100000; 
+		}
+    } else{
+	   //model.rotation.z= 0;
+    }   
+    //console.log(array);
+    //console.log(array[3]/64);                                 
+});
 function playSound() {
     setupSound();
-    sound.start(0);
+	sound.start(0);
 }
 function stopSound() {
     sound.stop(0);
