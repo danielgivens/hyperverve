@@ -161,7 +161,7 @@ function onDocumentMouseDown(event) {
 		$body.addClass('pressed');
 		camera.position.z = 4000 * Math.cos( .01 );	
 		glitchPass.goWild = true;
-		if($audio && sound){sound.playbackRate.value = 10.7;}
+		if($audio && sound){sound.playbackRate.value = 0.7;}
 		$body.removeClass('show-about');
 		$body.removeClass('show-contact');
 	}
