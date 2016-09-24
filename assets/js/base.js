@@ -89,6 +89,7 @@ function init() {
 		loadSound('assets/audio/loop.mp3');
 	}
 	container = document.createElement( 'div' );
+	$(container).attr('id','bg');
 	document.body.appendChild( container );
 	camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 5000 );
 	camera.position.z = 3000;
@@ -304,6 +305,7 @@ function render() {
 	camera.lookAt( scene.position );
 	composer.render( scene, camera );
 }
+var sampleBuffer, sampleCount;
 function loadSound(url) {
     var request = new XMLHttpRequest();
     request.open('GET', url, true);
@@ -311,8 +313,9 @@ function loadSound(url) {
     request.onload = function () {
         audioContext.decodeAudioData(request.response, function (buffer) {
             var soundLength = buffer.duration;
-           sampleBuffer = buffer;
-           playSound();
+			sampleBuffer = buffer;
+			displayBuffer(sampleBuffer);
+			playSound();
         });
     };
     request.send();
@@ -329,62 +332,6 @@ function setupSound() {
 	sound.playbackRate.value = 1;
 	$playing = true;
 }
-window.setInterval(function(){
-	if(!isMobile){
-		array = new Uint8Array(analyser.frequencyBinCount);
-	    analyser.getByteFrequencyData(array); 
-	    if(array[8] > 130){
-		    if(!$enableMove && !$interior){
-				glitchPass.goWild = true;
-				$wild = setTimeout(function(){
-					glitchPass.goWild = false;
-				},150);
-			} else if(!$interior){
-				glitchPass.goWild = true;
-				clearTimeout($wild);
-			} else{
-				glitchPass.goWild = false;
-				clearTimeout($wild);			
-			}
-	    } 
-	    $brightness = array[6]/100;
-	    if($brightness < 0.75){
-		    $brightness = 0.75;
-	    }
-	    pointLight.intensity = $brightness;
-	    if(array[5] > 200){
-		    if(!$enableMove && !$interior){
-				model.traverse( function ( object ) { object.visible = false; } );
-			}
-			setTimeout(function(){
-				model.traverse( function ( object ) { object.visible = true; } );
-			},150);    
-	    }
-	    if(array[4] > 220){
-		    if(!$enableMove && !$interior){
-			    glitchPass.Hits = array[4]/100;
-			} else{
-				glitchPass.hits = 0.05;
-			}
-	    }
-	    if(array[2] > 200){
-		    if(!$enableMove && !$interior){
-				model.rotation.x -= array[3]/100000; 
-			} else{
-				 //model.rotation.x = 0;
-			}
-	    } else{
-		   model.rotation.x = 0;
-	    }
-	    if(array[0] > 245){
-		    if(!$enableMove && !$interior){
-				model.rotation.z += array[0]/100000; 
-			}
-	    } else{
-		   //model.rotation.z= 0;
-	    }   
-	}
-});
 function playSound() {
     setupSound();
 	sound.start(0);
@@ -392,3 +339,130 @@ function playSound() {
 function stopSound() {
     sound.stop(0);
 }
+var canvasWidth = 180,  canvasHeight = 30 ;
+var newCanvas   = createCanvas (canvasWidth, canvasHeight);
+var context     = null;
+window.onload = appendCanvas;
+function appendCanvas() { document.body.appendChild(newCanvas);
+                          context = newCanvas.getContext('2d')
+                          $(newCanvas).attr('id', 'waveform'); }
+function displayBuffer(buff) {
+	var leftChannel = buff.getChannelData(0);       
+	var resampled = new Float64Array(canvasWidth * 6 );
+	var i=0, j=0, buckIndex = 0;
+	var min=1e3, max=-1e3;
+	var thisValue=0, res=0;
+	var sampleCount = leftChannel.length;
+	for (i=0; i<sampleCount; i++) {
+	    buckIndex = 0 | ( canvasWidth * i / sampleCount );
+	    buckIndex *= 6;
+	    thisValue = leftChannel[i];
+	    if (thisValue>0) {
+	        resampled[buckIndex    ] += thisValue;
+	        resampled[buckIndex + 1] +=1;               
+	    } else if (thisValue<0) {
+	        resampled[buckIndex + 3] += thisValue;
+	        resampled[buckIndex + 4] +=1;                           
+	    }
+	    if (thisValue<min) min=thisValue;
+	    if (thisValue>max) max = thisValue;
+	}
+	for (i=0, j=0; i<canvasWidth; i++, j+=6) {
+	   if (resampled[j+1] != 0) {
+	         resampled[j] /= resampled[j+1]; ;
+	   }
+	   if (resampled[j+4]!= 0) {
+	         resampled[j+3] /= resampled[j+4];
+	   }
+	}
+	for (i=0; i<leftChannel.length; i++) {
+	    buckIndex = 0 | (canvasWidth * i / leftChannel.length );
+	    buckIndex *= 6;
+	    thisValue = leftChannel[i];
+	    if (thisValue>0) {
+	        resampled[buckIndex + 2] += Math.abs( resampled[buckIndex] - thisValue );               
+	    } else  if (thisValue<0) {
+	        resampled[buckIndex + 5] += Math.abs( resampled[buckIndex + 3] - thisValue );                           
+	    }
+	}
+	for (i=0, j=0; i<canvasWidth; i++, j+=6) {
+	    if (resampled[j+1]) resampled[j+2] /= resampled[j+1];
+	    if (resampled[j+4]) resampled[j+5] /= resampled[j+4];   
+	}
+	context.save();
+	context.fillStyle = 'rgba(0,0,0,0)' ;
+	context.fillRect(0,0,canvasWidth,canvasHeight );
+	context.translate(0.5,canvasHeight / 2);   
+	context.scale(1, 200);
+	for (var i=0; i< canvasWidth; i++) {
+		j=i*6;
+		context.strokeStyle = 'rgba(255,255,255,0.1)';
+		context.beginPath();
+		context.moveTo( i  , (resampled[j] - resampled[j+2] ));
+		context.lineTo( i  , (resampled[j +3] + resampled[j+5] ) );
+		context.stroke();
+	}
+	context.restore();
+	$visualizer = setInterval(function(sampleBuffer){
+		if($audio && $playing){
+			array = new Uint8Array(analyser.frequencyBinCount);
+		    analyser.getByteFrequencyData(array); 
+		    if(array[8] > 130){
+			    if(!$enableMove && !$interior){
+					glitchPass.goWild = true;
+					$wild = setTimeout(function(){
+						glitchPass.goWild = false;
+					},150);
+				} else if(!$interior){
+					glitchPass.goWild = true;
+					clearTimeout($wild);
+				} else{
+					glitchPass.goWild = false;
+					clearTimeout($wild);			
+				}
+		    } 
+		    $brightness = array[6]/100;
+		    if($brightness < 0.75){
+			    $brightness = 0.75;
+		    }
+		    pointLight.intensity = $brightness;
+		    if(array[5] > 200){
+			    if(!$enableMove && !$interior){
+					model.traverse( function ( object ) { object.visible = false; } );
+				}
+				setTimeout(function(){
+					model.traverse( function ( object ) { object.visible = true; } );
+				},150);    
+		    }
+		    if(array[4] > 220){
+			    if(!$enableMove && !$interior){
+				    glitchPass.Hits = array[4]/100;
+				} else{
+					glitchPass.hits = 0.05;
+				}
+		    }
+		    if(array[2] > 200){
+			    if(!$enableMove && !$interior){
+					model.rotation.x -= array[3]/100000; 
+				} else{
+					 //model.rotation.x = 0;
+				}
+		    } else{
+			   model.rotation.x = 0;
+		    }
+		    if(array[0] > 245){
+			    if(!$enableMove && !$interior){
+					model.rotation.z += array[0]/100000; 
+				}
+		    } else{
+			   //model.rotation.z= 0;
+		    } 
+			//console.log(sampleCount+', '+audioContext.currentTime);
+		}
+	});   
+}
+function createCanvas ( w, h ) {
+    var newCanvas = document.createElement('canvas');
+    newCanvas.width  = w;     newCanvas.height = h;
+    return newCanvas;
+};
