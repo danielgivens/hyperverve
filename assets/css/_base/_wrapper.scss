@@ -33,6 +33,7 @@ nav{
 		font-size: 10px;
 		letter-spacing: 2px;
 		margin-left: 15px;		
+		mix-blend-mode: difference;
 	}
 }
 #mute{
@@ -56,6 +57,7 @@ nav{
 	right:60px;
 	z-index: 100;
 	cursor: pointer;
+	mix-blend-mode: difference;
 }
 .audio{
 	#waveform, #mute{
