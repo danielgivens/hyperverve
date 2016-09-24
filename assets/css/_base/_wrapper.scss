@@ -50,17 +50,8 @@ nav{
 	display: none;
 	@include transform(rotate(180deg));
 }
-#waveform{
-	display: none;
-	position: absolute;
-	bottom:60px;
-	right:60px;
-	z-index: 100;
-	cursor: pointer;
-	mix-blend-mode: difference;
-}
 .audio{
-	#waveform, #mute{
+	#mute{
 		display: block;
 	}
 }

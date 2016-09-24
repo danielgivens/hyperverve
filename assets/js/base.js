@@ -306,6 +306,7 @@ function render() {
 	composer.render( scene, camera );
 }
 var sampleBuffer, sampleCount;
+
 function loadSound(url) {
     var request = new XMLHttpRequest();
     request.open('GET', url, true);
@@ -314,8 +315,64 @@ function loadSound(url) {
         audioContext.decodeAudioData(request.response, function (buffer) {
             var soundLength = buffer.duration;
 			sampleBuffer = buffer;
-			displayBuffer(sampleBuffer);
-			playSound();
+			playSound(0);
+			console.log(soundLength);
+			$visualizer = setInterval(function(){
+				if($audio && $playing){
+					array = new Uint8Array(analyser.frequencyBinCount);
+				    analyser.getByteFrequencyData(array); 
+				    if(array[8] > 130){
+					    if(!$enableMove && !$interior){
+							glitchPass.goWild = true;
+							$wild = setTimeout(function(){
+								glitchPass.goWild = false;
+							},150);
+						} else if(!$interior){
+							glitchPass.goWild = true;
+							clearTimeout($wild);
+						} else{
+							glitchPass.goWild = false;
+							clearTimeout($wild);			
+						}
+				    } 
+				    $brightness = array[6]/100;
+				    if($brightness < 0.75){
+					    $brightness = 0.75;
+				    }
+				    pointLight.intensity = $brightness;
+				    if(array[5] > 200){
+					    if(!$enableMove && !$interior){
+							model.traverse( function ( object ) { object.visible = false; } );
+						}
+						setTimeout(function(){
+							model.traverse( function ( object ) { object.visible = true; } );
+						},150);    
+				    }
+				    if(array[4] > 220){
+					    if(!$enableMove && !$interior){
+						    glitchPass.Hits = array[4]/100;
+						} else{
+							glitchPass.hits = 0.05;
+						}
+				    }
+				    if(array[2] > 200){
+					    if(!$enableMove && !$interior){
+							model.rotation.x -= array[3]/100000; 
+						} else{
+							 //model.rotation.x = 0;
+						}
+				    } else{
+					   model.rotation.x = 0;
+				    }
+				    if(array[0] > 245){
+					    if(!$enableMove && !$interior){
+							model.rotation.z += array[0]/100000; 
+						}
+				    } else{
+					   //model.rotation.z= 0;
+				    } 
+				}
+			});   
         });
     };
     request.send();
@@ -330,139 +387,14 @@ function setupSound() {
     sound.connect(analyser);
     analyser.connect(audioContext.destination);
 	sound.playbackRate.value = 1;
+}
+function playSound(time) {
+    setupSound();
+	sound.start(time);
 	$playing = true;
 }
-function playSound() {
-    setupSound();
-	sound.start(0);
-}
 function stopSound() {
+	$playing = false;
     sound.stop(0);
 }
-var canvasWidth = 180,  canvasHeight = 30 ;
-var newCanvas   = createCanvas (canvasWidth, canvasHeight);
-var context     = null;
-appendCanvas();
-function appendCanvas() { document.body.appendChild(newCanvas);
-                          context = newCanvas.getContext('2d');
-                          $(newCanvas).attr('id', 'waveform'); }
-function displayBuffer(buff) {
-	context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-	var leftChannel = buff.getChannelData(0);       
-	var resampled = new Float64Array(canvasWidth * 6 );
-	var i=0, j=0, buckIndex = 0;
-	var min=1e3, max=-1e3;
-	var thisValue=0, res=0;
-	var sampleCount = leftChannel.length;
-	for (i=0; i<sampleCount; i++) {
-	    buckIndex = 0 | ( canvasWidth * i / sampleCount );
-	    buckIndex *= 6;
-	    thisValue = leftChannel[i];
-	    if (thisValue>0) {
-	        resampled[buckIndex    ] += thisValue;
-	        resampled[buckIndex + 1] +=1;               
-	    } else if (thisValue<0) {
-	        resampled[buckIndex + 3] += thisValue;
-	        resampled[buckIndex + 4] +=1;                           
-	    }
-	    if (thisValue<min) min=thisValue;
-	    if (thisValue>max) max = thisValue;
-	}
-	for (i=0, j=0; i<canvasWidth; i++, j+=6) {
-	   if (resampled[j+1] != 0) {
-	         resampled[j] /= resampled[j+1]; ;
-	   }
-	   if (resampled[j+4]!= 0) {
-	         resampled[j+3] /= resampled[j+4];
-	   }
-	}
-	for (i=0; i<leftChannel.length; i++) {
-	    buckIndex = 0 | (canvasWidth * i / leftChannel.length );
-	    buckIndex *= 6;
-	    thisValue = leftChannel[i];
-	    if (thisValue>0) {
-	        resampled[buckIndex + 2] += Math.abs( resampled[buckIndex] - thisValue );               
-	    } else  if (thisValue<0) {
-	        resampled[buckIndex + 5] += Math.abs( resampled[buckIndex + 3] - thisValue );                           
-	    }
-	}
-	for (i=0, j=0; i<canvasWidth; i++, j+=6) {
-	    if (resampled[j+1]) resampled[j+2] /= resampled[j+1];
-	    if (resampled[j+4]) resampled[j+5] /= resampled[j+4];   
-	}
-	//context.save();
-	context.fillStyle = 'rgba(0,0,0,0)' ;
-	context.fillRect(0,0,canvasWidth,canvasHeight );
-	context.translate(0.5,canvasHeight / 2);   
-	context.scale(1, 200);
-	for (var i=0; i< canvasWidth; i++) {
-		j=i*6;
-		context.strokeStyle = 'rgba(255,255,255,1)';
-		context.beginPath();
-		context.moveTo( i  , (resampled[j] - resampled[j+2] ));
-		context.lineTo( i  , (resampled[j +3] + resampled[j+5] ) );
-		context.stroke();
-	}
-}
-$visualizer = setInterval(function(){
-	if($audio && $playing){
-		array = new Uint8Array(analyser.frequencyBinCount);
-	    analyser.getByteFrequencyData(array); 
-	    if(array[8] > 130){
-		    if(!$enableMove && !$interior){
-				glitchPass.goWild = true;
-				$wild = setTimeout(function(){
-					glitchPass.goWild = false;
-				},150);
-			} else if(!$interior){
-				glitchPass.goWild = true;
-				clearTimeout($wild);
-			} else{
-				glitchPass.goWild = false;
-				clearTimeout($wild);			
-			}
-	    } 
-	    $brightness = array[6]/100;
-	    if($brightness < 0.75){
-		    $brightness = 0.75;
-	    }
-	    pointLight.intensity = $brightness;
-	    if(array[5] > 200){
-		    if(!$enableMove && !$interior){
-				model.traverse( function ( object ) { object.visible = false; } );
-			}
-			setTimeout(function(){
-				model.traverse( function ( object ) { object.visible = true; } );
-			},150);    
-	    }
-	    if(array[4] > 220){
-		    if(!$enableMove && !$interior){
-			    glitchPass.Hits = array[4]/100;
-			} else{
-				glitchPass.hits = 0.05;
-			}
-	    }
-	    if(array[2] > 200){
-		    if(!$enableMove && !$interior){
-				model.rotation.x -= array[3]/100000; 
-			} else{
-				 //model.rotation.x = 0;
-			}
-	    } else{
-		   model.rotation.x = 0;
-	    }
-	    if(array[0] > 245){
-		    if(!$enableMove && !$interior){
-				model.rotation.z += array[0]/100000; 
-			}
-	    } else{
-		   //model.rotation.z= 0;
-	    } 
-	}
-});   
 
-function createCanvas ( w, h ) {
-    var newCanvas = document.createElement('canvas');
-    newCanvas.width  = w;     newCanvas.height = h;
-    return newCanvas;
-};
