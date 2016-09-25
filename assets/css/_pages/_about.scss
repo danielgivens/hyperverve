@@ -1,11 +1,14 @@
 #about{
 	padding-bottom: 25vw;
+	@include transition(transform .1s $ease);
 	@extend %clearfix;
 	#is{
 		position: relative;
-		padding-left:200px;
+		//padding-left:200px;
 		padding-top:200px;
-		text-align: left;
+		width: 25%;
+		left:0;
+		text-align: center;
 		display: block;
 		font-family: $serif;
 		font-size: 2rem;
@@ -35,7 +38,7 @@
 		    font-family: $serif;
 		    font-size: 0.9rem;
 		    text-align: justify;
-		    margin-left: 60px;
+		    margin-left: 120px;
 		    margin-bottom: 30px;
 		    em{
 			    font-family: $narrow;
@@ -45,7 +48,7 @@
 		ul{
 			font-size: 0.6rem;
 			text-transform: uppercase;
-			margin-top: 400px;
+			margin-top: 300px;
 			margin-bottom: 100px;
 			margin-left: 60px;
 			li{
@@ -53,9 +56,6 @@
 				line-height: 1rem;
 				a{
 					color: black;
-					&:hover{
-						//font-family: $serif;
-					}
 				}
 			}
 		}
@@ -71,9 +71,9 @@
 video{
 	position: absolute;
 	z-index: 100;
-	left:40px;
+	left:0px;
 	top:100%;
-	margin-top: -20px;
+	margin-top: 0;
 	height: auto;
 	@include calc('width','50% - 100px');
 	visibility: hidden;
@@ -88,6 +88,9 @@ video{
 }
 @include breakpoint(mobile){
 	#about{
+		height: 100%;
+		overflow-x:hidden;
+		overflow-y:scroll;
 		#is{
 			padding-top: 200px;
 			padding-left: 60px;

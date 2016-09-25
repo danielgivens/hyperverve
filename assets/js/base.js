@@ -71,12 +71,18 @@ if($audio){
 }
 init();
 animate();
+$scrolled = 0;
 $(document)
 .on('mousemove', onDocumentMouseMove)
 .on('mousedown touchstart', onDocumentMouseDown)
-.on('mouseup touchend', onDocumentMouseUp);
-$('section#about').scroll(function(){
-	$('video').css('transform','translateY(-'+$(this).scrollTop()+'px)');
+.on('mouseup touchend', onDocumentMouseUp)
+.on('mousewheel DOMMouseScroll', function (e) {
+		var delta = e.originalEvent.detail;
+		if(!delta){
+			delta =  e.originalEvent.wheelDelta;
+		}
+		onScroll(delta);
+	    e.preventDefault();
 });
 $('#about-btn').click(function(e){
 	onAboutClick(e);
@@ -171,6 +177,49 @@ function createScene( geometry, m2 ) {
 	scene.add(model);
 	render();
 }
+var $form = $('#contact form');
+if ( $form.length > 0 ) {
+    $('form input[type="submit"]').bind('click', function ( event ) {
+        if ( event ) event.preventDefault();
+		register($form);
+    });
+}
+function register($form) {
+	$.ajax({
+	    type: $form.attr('method'),
+	    url: $form.attr('action'),
+	    data: $form.serialize(),
+	    cache       : false,
+	    dataType    : 'jsonp',
+		jsonp: 'c',
+	    contentType: 'application/json; charset=utf-8',
+	    success     : function(data) {
+	        if (data.result != "success") {
+	            $form.removeClass('success');
+	            $form.addClass('error');
+	        } else {
+	            $form.removeClass('error');
+	            $form.addClass('success');
+	        }
+	    }
+	});
+}
+
+function onScroll(delta){
+	if($body.hasClass('show-about')){
+		$scrolled = $scrolled + delta/10;
+	    $max = ($('#about').height() - $(window).height()) *-1;
+		if($scrolled >= 0){
+			$scrolled = 0;
+		}
+		if($scrolled <= $max){
+			$scrolled = $max;
+		}
+	    $('#about').css('transform','translateY('+$scrolled+'px)');
+		$('video').css('transform','translateY('+$scrolled+'px)');
+    }
+	
+}
 function onDocumentMouseDown(event) {
 	if($(event.target).attr('id') != 'about-btn' && $(event.target).attr('id') != 'contact-btn' && !$interior){
 		glitchPass.Hits = 0.2;
@@ -233,39 +282,15 @@ function onAboutClick(event) {
 			$('#about').addClass('active');
 			$('#about').addClass('done');
 			$body.addClass('interior');
+			$('#contact').removeClass('done');
+			$('#contact').removeClass('active');
+			
 			glitchPass.goWild = false;
-			$('video').get(0).play();			
+			$('video').get(0).play();	
+			$('video').css('top',parseInt($('#about hgroup').outerHeight())+parseInt($('#about hgroup').offset().top)+300+'px');
 		},600);
 	});
 }
-var $form = $('#contact form');
-if ( $form.length > 0 ) {
-    $('form input[type="submit"]').bind('click', function ( event ) {
-        if ( event ) event.preventDefault();
-		register($form);
-    });
-}
-function register($form) {
-$.ajax({
-    type: $form.attr('method'),
-    url: $form.attr('action'),
-    data: $form.serialize(),
-    cache       : false,
-    dataType    : 'jsonp',
-	jsonp: 'c',
-    contentType: 'application/json; charset=utf-8',
-    success     : function(data) {
-        if (data.result != "success") {
-            $form.removeClass('success');
-            $form.addClass('error');
-        } else {
-            $form.removeClass('error');
-            $form.addClass('success');
-        }
-    }
-});
-}
-
 function onContactClick(event) {
 	$tweenSpeed = 600;
 	glitchPass.goWild = false;
@@ -306,19 +331,25 @@ function onContactClick(event) {
 		setTimeout(function(){
 			$('#contact').addClass('active');
 			$('#contact').addClass('done');
+			$('video').get(0).pause();			
+			$('#about').removeClass('done');
+			$('#about').removeClass('active');
+			
 			$body.addClass('interior');
 			glitchPass.goWild = false;
 		},600);
 	});
 }
+currentY = 0;
+startingY = 0;
 function onDocumentMouseMove(event) {
+	e=event;
 	mouseX = ( event.clientX - windowHalfX )*3;
 	mouseY = ( event.clientY - windowHalfY )*3;
 	if($enableMove && $audio && sound && !$interior){
 		glitchPass.goWild = true;
 		sound.detune.value = ( event.clientY - windowHalfY )/2;
 	} 
-	e=event;
 	pauseEvent(e);	
 }
 function pauseEvent(e){
