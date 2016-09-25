@@ -36,8 +36,16 @@ urls = [
 	path + 'blank' + format, path + 'blank' + format,
 	path + 'blank' + format, path + $bg + format
 ];
+var models = [
+    "assets/models/logo1.json",
+    "assets/models/logo2.json",
+    "assets/models/logo3.json"    
+
+]
+var model = models[Math.floor(Math.random()*models.length)];
+
 var jsonModelURL = [ 
-    "assets/models/hv2.json",
+    model
 ];
 if (document.documentMode || /Edge/.test(navigator.userAgent)) {
     $ie = true;    
@@ -398,7 +406,7 @@ function loadSound(url) {
             var soundLength = buffer.duration;
 			sampleBuffer = buffer;
 			playSound(0);
-			console.log(soundLength);
+			//console.log(soundLength);
 			$visualizer = setInterval(function(){
 				if($audio && $playing){
 					array = new Uint8Array(analyser.frequencyBinCount);
