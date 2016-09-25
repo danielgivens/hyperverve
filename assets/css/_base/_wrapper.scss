@@ -13,7 +13,7 @@ body {
 	position:absolute;
 	top:60px;
 	left:60px;
-	z-index: 100;
+	z-index: 1000;
 	width:auto;
 	height: 60px;
 	cursor: pointer;
@@ -21,19 +21,24 @@ body {
 }
 nav{
 	position:absolute;
+	z-index: 1000;
 	top:60px;
 	right:60px;
+		mix-blend-mode: difference;
 	a{
 		color:white;
 		text-decoration: none;
 		text-transform: uppercase;
-		font-family:$narrow;
+		font-family:$sans;
 		font-weight:bold;
 		line-height: 60px;
 		font-size: 10px;
 		letter-spacing: 2px;
-		margin-left: 15px;		
-		mix-blend-mode: difference;
+		margin-left: 15px;	
+		&:hover{
+			font-family: $serif;
+			font-weight: bold;
+		}	
 	}
 }
 #mute{
@@ -44,23 +49,36 @@ nav{
 	text-decoration: none;
 	text-transform: uppercase;
 	font-size: 10px;
+	z-index: 1000;
 	letter-spacing: 2px;
 	writing-mode: vertical-lr;
 	cursor: pointer;
 	display: none;
 	@include transform(rotate(180deg));
-}
-#waveform{
-	display: none;
-	position: absolute;
-	bottom:60px;
-	right:60px;
-	z-index: 100;
-	cursor: pointer;
 	mix-blend-mode: difference;
 }
+section{
+	position: absolute;
+	top:0;
+	left:0;
+	width: 100%;
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	display: none;
+	background: white;
+	z-index: 100;
+	&.active{
+		display: block;
+	}
+}
+.interior{
+	#bg{
+		opacity: 0.2;
+	}
+}
 .audio{
-	#waveform, #mute{
+	#mute{
 		display: block;
 	}
 }

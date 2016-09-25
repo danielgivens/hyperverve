@@ -1,0 +1,144 @@
+#about{
+	background: white;
+	mix-blend-mode: difference;
+	padding-bottom: 25vw;
+	@extend %clearfix;
+	#is{
+		position: relative;
+		padding-left:200px;
+		padding-top:200px;
+		text-align: left;
+		display: block;
+		font-family: $serif;
+		font-size: 2rem;
+		font-weight: bold;
+		z-index: 100;
+	}
+	hgroup{
+		position: relative;
+		z-index: 100;
+		width: 60%;
+		margin: 50px 60px 150px 30%;
+		h1{
+			font-family: $sans;
+			font-weight: bold;
+			font-size: 9rem;
+			font-weight: bold;
+		}
+	}
+	article{
+		position: relative;
+		z-index: 100;
+		margin: 0 60px 100px 50%;
+		p{
+			max-width: 300px;
+		    line-height: 1.5;
+		    letter-spacing: 0.1rem;
+		    font-family: $serif;
+		    font-size: 0.9rem;
+		    text-align: justify;
+		    margin-left: 60px;
+		    margin-bottom: 30px;
+		    em{
+			    font-family: $narrow;
+			    font-weight: normal;
+		    }
+		}
+		ul{
+			font-size: 0.6rem;
+			text-transform: uppercase;
+			margin-top: 400px;
+			margin-bottom: 100px;
+			margin-left: 60px;
+			li{
+				margin-bottom: 20px;
+				line-height: 1rem;
+				a{
+					color: black;
+					&:hover{
+						font-family: $serif;
+					}
+				}
+			}
+		}
+	}
+	h2{
+		margin-left: 50%;
+		margin-right: 120px;
+		line-height: 1.5;
+		font-family: $sans;
+		font-weight: bold;		
+	}
+}
+video{
+	position: absolute;
+	z-index: 100;
+	left:40px;
+	top:100%;
+	margin-top: -20px;
+	height: auto;
+	@include calc('width','50% - 100px');
+	visibility: hidden;
+	@include opacity(0);
+	box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+	@include transition(opacity 0s $ease 0s, 0s transform);
+}
+.show-about.interior video{
+	@include transition(opacity 0.5s $ease 0s, 0s transform);
+	@include opacity(1);
+	visibility: visible;
+}
+@include breakpoint(mobile){
+	#about{
+		#is{
+			padding-top: 200px;
+			padding-left: 60px;
+			width: 100%;
+			text-align: left;
+		}
+		hgroup{
+			width: 100%;
+			margin: 50px 0 150px;
+			padding: 0 60px;
+		}
+		article{
+			margin: 60px 60px 60px 60px;
+			p{
+				max-width: 100%;
+				margin: 0 0 30px 0;
+			}	
+			ul{
+				//text-align: center;
+				margin:100px 0 100px;
+			}		
+		}
+
+	}
+	video{
+		display: none;
+	}
+}
+@include breakpoint(mobile-landscape){
+	#about{
+		#is{
+			position: absolute;
+			padding-top: 120px;
+			padding-left: 150px;
+		}
+		hgroup{
+			width: 75%;
+			margin-top: 200px;
+			margin-left: 25%;
+			padding-right: 60px;
+			margin-bottom: 60px;
+		}
+		article{
+			margin:0 0 0 150px;
+			width: 50%;
+			padding: 0 60px 0 0;
+			ul{
+				margin-top: 60px;
+			}
+		}
+	}
+}

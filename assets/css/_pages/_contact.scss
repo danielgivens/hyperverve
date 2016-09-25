@@ -1,0 +1,148 @@
+#contact{
+	overflow: hidden;
+	background: white;
+	mix-blend-mode: difference;
+	article{
+		position: absolute;
+		height: 50vh;
+		width: 100%;
+		left:0;
+		h1{
+			position: absolute;
+			position: absolute;
+			top:50%;
+			left:0;
+			width: 100%;
+			text-align: center;
+			font-size: 2rem;
+			font-family: $serif;
+			z-index: 1;
+			font-weight: bold;
+			@include transform(translateY(-50%));
+			em{
+				margin-left: 50%;
+				font-family: $narrow;
+			}			
+		}
+		aside{
+			display: none;
+			position: absolute;
+			top:50%;
+			left:50%;
+			z-index: 100;
+			@include transform(translateY(-50%) translateX(-50%));
+			a{
+				color: white;
+				text-decoration: none;
+				font-size: 1rem;
+				//letter-spacing: 0.1rem;
+				line-height: 1rem;
+				padding: 20px 0;
+				border-bottom: 3px solid white;
+				font-family: $sans;
+				&:hover{
+					font-family: $serif;
+				}
+			}
+			form{
+				width: 300px;
+				margin: 0 auto;
+				text-align: center;
+				input[type=email]{
+					background: transparent;
+					border:none;
+					border-bottom: 3px solid white;
+					color: white;
+					font-family: $serif;
+					text-align: center;
+					width: 100%;
+					display: block;
+					padding: 20px 0;
+					line-height: 1rem;
+					font-size: 1rem;
+					@include appearance(none);
+					@include placeholder{
+						color: white;
+						font-family: $sans;
+					}
+				}
+				input[type=submit]{
+					background: transparent;
+					font-family: $sans;
+					font-weight: bold;
+					border: none;
+					text-transform: uppercase;
+					color: white;
+					text-align: center;
+					margin-top: 20px;
+					cursor: pointer;
+					letter-spacing: 0.05rem;
+					@include appearance(none);					
+				}
+				.label{
+					position: absolute;
+					top:50%;
+					left:0;
+					width:100%;
+					text-align: center;
+					font-family: $mono;
+					color: white;
+					font-size: 0.75rem;
+					@include transform(translateY(-50%));
+					visibility: hidden;
+				}
+				&.success{
+					input{visibility: hidden;}
+					.label.success{
+						visibility: visible;
+					}
+				}
+				&.error{
+					input{visibility: hidden;}
+					.label.error{
+						visibility: visible;
+					}
+				}
+
+			}
+		}
+		&:nth-of-type(2){
+			top:50vh;
+			h1{
+				font-family: $narrow;
+				em{
+					font-family: $serif;
+				}
+			}
+		}
+		&:hover{
+			background: black;
+			h1{
+				color: white;
+			}
+			aside{
+				display: block;
+			}
+		}
+	}
+	@include breakpoint(mobile){
+		article{
+			h1{
+				em{
+					margin-left: 0;
+				}
+			}
+			aside{
+				form{
+					width: 100vw;
+					padding:0 60px;
+				}
+			}
+			&:hover{
+				h1{
+					display: none;
+				}	
+			}
+		}
+	}
+}
