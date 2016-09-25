@@ -261,6 +261,8 @@ function onAboutClick(event) {
 	$body.addClass('show-about');
 	tween1.start();
 	tween2.start();
+	$scrolled = 0;
+	$('video').css('transform','translateY(0px)');
 	tween2.onComplete(function() {
 		if(!isMobile){
 			$speed = 0;
@@ -275,8 +277,7 @@ function onAboutClick(event) {
 		setTimeout(function(){
 			$('#about').addClass('active');
 			if(!isMobile){
-				$('#about').css('transform','translateY(-100px)');
-				$('video').css('transform','translateY(-1000px)');
+				$('#about').css('transform','translateY(-50px)');
 			}
 		},200);
 		setTimeout(function(){
