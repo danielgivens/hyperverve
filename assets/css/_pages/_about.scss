@@ -1,0 +1,100 @@
+#about{
+	#is{
+		position: relative;
+		padding-top: 200px;
+		padding-left: 200px;
+		text-align: left;
+		display: block;
+		font-family: $serif;
+		font-size: 2rem;
+		font-weight: bold;
+	}
+	hgroup{
+		width: 75%;
+		margin: 100px auto 100px 300px;
+		h1{
+			font-family: $sans;
+			font-weight: bold;
+			font-size: 9rem;
+			display: none;
+			font-weight: bold;
+			&:nth-of-type(1){
+				display: block;
+			}
+		}
+	}
+	article{
+		margin: 100px 60px 100px 50%;
+		max-width: 400px;
+		p{
+		    line-height: 2;
+		    font-family: $sans;
+		    font-size: 0.75rem;
+		    text-align: justify;
+		    em{
+			    font-family: $serif;
+		    }
+		    strong{
+			    font-family: $narrow;
+			    font-weight: bold;
+		    }
+		}
+	}
+}
+#contact{
+	article{
+		position: absolute;
+		height: 50vh;
+		width: 100%;
+		left:0;
+		&:nth-of-type(2){
+			top:50vh;
+		}
+		h1{
+			position: absolute;
+			position: absolute;
+			top:50%;
+			left:0;
+			width: 100%;
+			text-align: center;
+			font-size: 4rem;
+			font-family: $serif;
+			z-index: 1;
+			font-weight: bold;
+			@include transform(translateY(-50%));
+			em{
+				font-family: $narrow;
+			}			
+		}
+		aside{
+			display: none;
+			position: absolute;
+			top:50%;
+			left:50%;
+			z-index: 100;
+			@include transform(translateY(-50%) translateX(-50%));
+			a{
+				color: white;
+				text-decoration: none;
+				font-size: 1rem;
+				letter-spacing: 0.1rem;
+				line-height: 1rem;
+				&:hover{
+					letter-spacing: 0.5rem;
+					text-transform: uppercase;
+					font-family: $narrow;
+					font-weight: bold;
+				}
+			}
+		}
+		&:hover{
+			background: black;
+			h1{
+				display: none;
+			}
+			aside{
+				display: block;
+			}
+		}
+	}
+}

@@ -167,21 +167,29 @@ function onDocumentMouseDown(event) {
 		camera.position.z = 4000 * Math.cos( .01 );	
 		glitchPass.goWild = true;
 		if($audio && sound){sound.playbackRate.value = 0.7;}
+		$body.removeClass('interior');
 		$body.removeClass('show-about');
 		$body.removeClass('show-contact');
+		$('section').removeClass('active');
+		$('section').removeClass('done');
 	}
 }
 function onAboutClick(event) {
 	$tweenSpeed = 600;
+	glitchPass.goWild = false;
 	if($body.hasClass('show-contact')){
 		$tweenSpeed = 1200;
+		$('#contact').removeClass('done');
+		$('#contact').removeClass('active');
+		$body.removeClass('interior');
+		glitchPass.goWild = true;
 	}
+	
 	$interior = true;
 	$body.removeClass('show-about');
 	$body.removeClass('show-contact');
 	var tween1 = new TWEEN.Tween( model.scale ).to( { x:3,y:3,z:3 }, $tweenSpeed ).easing( TWEEN.Easing.Exponential.InOut );
 	var tween2 = new TWEEN.Tween( camera.position ).to( { x:1500,y:0,z:10 }, $tweenSpeed ).easing( TWEEN.Easing.Exponential.InOut );
-	glitchPass.goWild = false;
 	$enableMove= false;
 	$body.addClass('pressed');
 	$body.addClass('show-about');
@@ -193,20 +201,40 @@ function onAboutClick(event) {
 		}
 		$enableMove= true;
 		$interior = true;
-		glitchPass.goWild = false;
+		glitchPass.goWild = true;
+		$('#about').addClass('active');
+		setTimeout(function(){
+			$('#about').removeClass('active');
+		},100);
+		setTimeout(function(){
+			$('#about').addClass('active');
+		},200);
+		setTimeout(function(){
+			$('#about').removeClass('active');
+		},300);		
+		setTimeout(function(){
+			$('#about').addClass('active');
+			$('#about').addClass('done');
+			$body.addClass('interior');
+			glitchPass.goWild = false;
+		},600);
 	});
 }
 function onContactClick(event) {
 	$tweenSpeed = 600;
+	glitchPass.goWild = false;
 	if($body.hasClass('show-about')){
 		$tweenSpeed = 1200;
+		$('#about').removeClass('done');
+		$('#about').removeClass('active');
+		$body.removeClass('interior');
+		glitchPass.goWild = true;
 	}
 	$interior = true;
 	$body.removeClass('show-about');
 	$body.removeClass('show-contact');
 	var tween1 = new TWEEN.Tween( model.scale ).to( { x:3,y:3,z:3 }, $tweenSpeed ).easing( TWEEN.Easing.Exponential.InOut );
 	var tween2 = new TWEEN.Tween( camera.position ).to( { x:-1500,y:0,z:10 }, $tweenSpeed ).easing( TWEEN.Easing.Exponential.InOut );
-	glitchPass.goWild = false;
 	$enableMove= false;
 	$body.addClass('pressed');
 	$body.addClass('show-contact');
@@ -218,7 +246,22 @@ function onContactClick(event) {
 		}
 		$enableMove= true;
 		$interior = true;
-		glitchPass.goWild = false;
+		glitchPass.goWild = true;
+		setTimeout(function(){
+			$('#contact').removeClass('active');
+		},100);
+		setTimeout(function(){
+			$('#contact').addClass('active');
+		},200);
+		setTimeout(function(){
+			$('#contact').removeClass('active');
+		},300);		
+		setTimeout(function(){
+			$('#contact').addClass('active');
+			$('#contact').addClass('done');
+			$body.addClass('interior');
+			glitchPass.goWild = false;
+		},600);
 	});
 }
 function onDocumentMouseMove(event) {
