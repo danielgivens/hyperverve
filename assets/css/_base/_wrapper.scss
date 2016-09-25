@@ -56,6 +56,37 @@ nav{
 	@include transform(rotate(180deg));
 	mix-blend-mode: difference;
 }
+#loading{
+	position:absolute;
+	bottom:60px;
+	left:60px;
+	text-align: center;
+	color:white;
+	text-decoration: none;
+	text-transform: uppercase;
+	font-size: 10px;
+	z-index: 1000;
+	letter-spacing: 2px;
+	writing-mode: vertical-lr;
+	@include transform(rotate(180deg));
+	mix-blend-mode: difference;
+}
+.loaded{
+	#loading{
+		display: none;	
+	}
+	&.audio{
+		#mute{
+			display: block;
+		}
+		&.muted{
+			#mute{
+				text-decoration: line-through;
+			}
+		}
+
+	}
+}
 section{
 	position: absolute;
 	top:0;
@@ -76,16 +107,7 @@ section{
 		opacity: 0.2;
 	}
 }
-.audio{
-	#mute{
-		display: block;
-	}
-}
-.muted{
-	#mute{
-		text-decoration: line-through;
-	}
-}
+
 .no-mix-blend-mode{
 	section{background: rgba(255,255,255,0.8);}
 	.interior{

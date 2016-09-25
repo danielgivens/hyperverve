@@ -274,6 +274,10 @@ function onAboutClick(event) {
 		},100);
 		setTimeout(function(){
 			$('#about').addClass('active');
+			if(!isMobile){
+				$('#about').css('transform','translateY(-100px)');
+				$('video').css('transform','translateY(-1000px)');
+			}
 		},200);
 		setTimeout(function(){
 			$('#about').removeClass('active');
@@ -287,6 +291,8 @@ function onAboutClick(event) {
 			
 			glitchPass.goWild = false;
 			$('video').get(0).play();	
+			$('#about').css('transform','translateY(0px)');
+			$('video').css('transform','translateY(0px)');
 			$('video').css('top',parseInt($('#about hgroup').outerHeight())+parseInt($('#about hgroup').offset().top)+300+'px');
 		},600);
 	});
@@ -381,6 +387,7 @@ function onDocumentMouseUp(event){
 THREE.DefaultLoadingManager.onProgress = function ( item, loaded, total ) {
     if(loaded === total){
 	    $mesh = true;
+	    $body.addClass('loaded');
     }
 };
 function animate() {
