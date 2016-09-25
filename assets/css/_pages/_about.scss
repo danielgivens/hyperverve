@@ -1,55 +1,85 @@
 #about{
+	background: white;
+	mix-blend-mode: difference;
+	padding-bottom: 25vw;
+	@extend %clearfix;
 	#is{
-		position: relative;
-		padding-top: 200px;
-		padding-left: 200px;
+		position: fixed;
+		left:200px;
+		top:200px;
 		text-align: left;
 		display: block;
 		font-family: $serif;
 		font-size: 2rem;
 		font-weight: bold;
+		z-index: 100;
 	}
 	hgroup{
+		position: relative;
+		z-index: 100;
 		width: 75%;
-		margin: 100px auto 100px 300px;
+		margin: 300px auto 150px 25%;
 		h1{
 			font-family: $sans;
 			font-weight: bold;
 			font-size: 9rem;
-			display: none;
 			font-weight: bold;
-			&:nth-of-type(1){
-				display: block;
-			}
 		}
 	}
 	article{
-		margin: 100px 60px 100px 50%;
-		max-width: 400px;
+		position: relative;
+		z-index: 100;
+		margin: 0 60px 100px 50%;
 		p{
-		    line-height: 2;
-		    font-family: $sans;
-		    font-size: 0.75rem;
+			max-width: 300px;
+		    line-height: 1.5;
+		    letter-spacing: 0.1rem;
+		    font-family: $serif;
+		    font-size: 0.9rem;
 		    text-align: justify;
+		    margin-left: 60px;
+		    margin-bottom: 30px;
 		    em{
-			    font-family: $serif;
-		    }
-		    strong{
 			    font-family: $narrow;
-			    font-weight: bold;
+			    font-weight: normal;
 		    }
 		}
 	}
+	h2{
+		margin-left: 50%;
+		margin-right: 120px;
+		line-height: 1.5;
+		font-family: $sans;
+		font-weight: bold;		
+	}
+}
+video{
+	position: absolute;
+	z-index: 100;
+	left:60px;
+	top:100%;
+	margin-top: -20px;
+	height: auto;
+	@include calc('width','50% - 120px');
+	visibility: hidden;
+	@include opacity(0);
+	box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+	@include transition(opacity 0s $ease 0s, 0s transform);
+}
+.show-about video{
+	@include transition(opacity 0.5s $ease 1.2s, 0s transform);
+	@include opacity(1);
+	visibility: visible;
 }
 #contact{
+	overflow: hidden;
+	background: white;
+	mix-blend-mode: difference;
 	article{
 		position: absolute;
 		height: 50vh;
 		width: 100%;
 		left:0;
-		&:nth-of-type(2){
-			top:50vh;
-		}
 		h1{
 			position: absolute;
 			position: absolute;
@@ -57,12 +87,13 @@
 			left:0;
 			width: 100%;
 			text-align: center;
-			font-size: 4rem;
+			font-size: 2rem;
 			font-family: $serif;
 			z-index: 1;
 			font-weight: bold;
 			@include transform(translateY(-50%));
 			em{
+				margin-left: 50%;
 				font-family: $narrow;
 			}			
 		}
@@ -77,20 +108,65 @@
 				color: white;
 				text-decoration: none;
 				font-size: 1rem;
-				letter-spacing: 0.1rem;
+				//letter-spacing: 0.1rem;
 				line-height: 1rem;
+				padding: 20px 0;
+				border-bottom: 3px solid white;
+				font-family: $sans;
 				&:hover{
-					letter-spacing: 0.5rem;
-					text-transform: uppercase;
-					font-family: $narrow;
+					font-family: $serif;
+				}
+			}
+			form{
+				width: 300px;
+				margin: 0 auto;
+				text-align: center;
+				input[type=text]{
+					background: transparent;
+					border:none;
+					border-bottom: 3px solid white;
+					color: white;
+					font-family: $serif;
+					text-align: center;
+					width: 100%;
+					display: block;
+					padding: 20px 0;
+					line-height: 1rem;
+					font-size: 1rem;
+					@include appearance(none);
+					@include placeholder{
+						color: white;
+						font-family: $sans;
+					}
+				}
+				input[type=submit]{
+					background: transparent;
+					font-family: $sans;
 					font-weight: bold;
+					border: none;
+					text-transform: uppercase;
+					color: white;
+					text-align: center;
+					margin-top: 20px;
+					cursor: pointer;
+					letter-spacing: 0.05rem;
+					@include appearance(none);					
+				}
+			}
+		}
+		&:nth-of-type(2){
+			top:50vh;
+			h1{
+				font-family: $narrow;
+				em{
+					font-family: $serif;
 				}
 			}
 		}
 		&:hover{
 			background: black;
 			h1{
-				display: none;
+				color: white;
 			}
 			aside{
 				display: block;

@@ -62,6 +62,10 @@ $(document)
 .on('mousemove', onDocumentMouseMove)
 .on('mousedown touchstart', onDocumentMouseDown)
 .on('mouseup touchend', onDocumentMouseUp);
+$('section#about').scroll(function(){
+	$('#about #is').css('transform','translateX(-'+$(this).scrollTop()+'px)');
+	$('video').css('transform','translateY(-'+$(this).scrollTop()+'px)');
+});
 $('#about-btn').click(function(e){
 	onAboutClick(e);
 	e.preventDefault();
@@ -184,7 +188,7 @@ function onAboutClick(event) {
 		$body.removeClass('interior');
 		glitchPass.goWild = true;
 	}
-	
+	$('#about h1').fitText(0.6);
 	$interior = true;
 	$body.removeClass('show-about');
 	$body.removeClass('show-contact');
@@ -440,4 +444,3 @@ function stopSound() {
 	$playing = false;
     sound.stop(0);
 }
-
