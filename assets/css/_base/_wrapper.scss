@@ -9,7 +9,7 @@ body {
 	background: #191919;
 	overflow: hidden;
 }
-#logo{
+.logo{
 	position:absolute;
 	top:60px;
 	left:60px;
@@ -17,7 +17,10 @@ body {
 	width:auto;
 	height: 60px;
 	cursor: pointer;
-	mix-blend-mode:difference;
+	mix-blend-mode: difference;
+	&#black{
+		display: none;
+	}
 }
 nav{
 	position:absolute;
@@ -32,13 +35,9 @@ nav{
 		font-family:$sans;
 		font-weight:bold;
 		line-height: 60px;
-		font-size: 10px;
-		letter-spacing: 2px;
+		font-size: 0.6rem;
+		letter-spacing: 0.1rem;
 		margin-left: 15px;	
-		&:hover{
-			font-family: $serif;
-			font-weight: bold;
-		}	
 	}
 }
 #mute{
@@ -67,6 +66,7 @@ section{
 	overflow-y: scroll;
 	display: none;
 	background: white;
+	mix-blend-mode: difference;
 	z-index: 100;
 	&.active{
 		display: block;
@@ -87,8 +87,34 @@ section{
 		text-decoration: line-through;
 	}
 }
+.no-mix-blend-mode{
+	section{background: rgba(255,255,255,0.8);}
+	.interior{
+		#bg{
+			opacity: 1;
+		}
+		nav{
+			a{
+				color: black;
+			}
+		}
+		#mute{
+			color:black;
+		}
+		.logo{
+			&#black{
+				display: block;
+			}
+			&#white{
+				display: none;
+			}
+			
+		}	
+
+	}
+}
 @include breakpoint(mobile){
-	#logo{
+	.logo{
 		left:30px;
 		top:30px;
 	}

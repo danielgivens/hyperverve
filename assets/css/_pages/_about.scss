@@ -1,6 +1,4 @@
 #about{
-	background: white;
-	mix-blend-mode: difference;
 	padding-bottom: 25vw;
 	@extend %clearfix;
 	#is{
@@ -56,7 +54,7 @@
 				a{
 					color: black;
 					&:hover{
-						font-family: $serif;
+						//font-family: $serif;
 					}
 				}
 			}
