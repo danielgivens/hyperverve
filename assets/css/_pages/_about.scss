@@ -44,6 +44,23 @@
 			    font-weight: normal;
 		    }
 		}
+		ul{
+			font-size: 0.6rem;
+			text-transform: uppercase;
+			margin-top: 400px;
+			margin-bottom: 100px;
+			margin-left: 60px;
+			li{
+				margin-bottom: 20px;
+				line-height: 1rem;
+				a{
+					color: black;
+					&:hover{
+						font-family: $serif;
+					}
+				}
+			}
+		}
 	}
 	h2{
 		margin-left: 50%;
@@ -71,130 +88,56 @@ video{
 	@include opacity(1);
 	visibility: visible;
 }
-#contact{
-	overflow: hidden;
-	background: white;
-	mix-blend-mode: difference;
-	article{
-		position: absolute;
-		height: 50vh;
-		width: 100%;
-		left:0;
-		h1{
-			position: absolute;
-			position: absolute;
-			top:50%;
-			left:0;
+@include breakpoint(mobile){
+	#about{
+		#is{
+			padding-top: 200px;
+			padding-left: 60px;
 			width: 100%;
-			text-align: center;
-			font-size: 2rem;
-			font-family: $serif;
-			z-index: 1;
-			font-weight: bold;
-			@include transform(translateY(-50%));
-			em{
-				margin-left: 50%;
-				font-family: $narrow;
-			}			
+			text-align: left;
 		}
-		aside{
-			display: none;
-			position: absolute;
-			top:50%;
-			left:50%;
-			z-index: 100;
-			@include transform(translateY(-50%) translateX(-50%));
-			a{
-				color: white;
-				text-decoration: none;
-				font-size: 1rem;
-				//letter-spacing: 0.1rem;
-				line-height: 1rem;
-				padding: 20px 0;
-				border-bottom: 3px solid white;
-				font-family: $sans;
-				&:hover{
-					font-family: $serif;
-				}
-			}
-			form{
-				width: 300px;
-				margin: 0 auto;
-				text-align: center;
-				input[type=email]{
-					background: transparent;
-					border:none;
-					border-bottom: 3px solid white;
-					color: white;
-					font-family: $serif;
-					text-align: center;
-					width: 100%;
-					display: block;
-					padding: 20px 0;
-					line-height: 1rem;
-					font-size: 1rem;
-					@include appearance(none);
-					@include placeholder{
-						color: white;
-						font-family: $sans;
-					}
-				}
-				input[type=submit]{
-					background: transparent;
-					font-family: $sans;
-					font-weight: bold;
-					border: none;
-					text-transform: uppercase;
-					color: white;
-					text-align: center;
-					margin-top: 20px;
-					cursor: pointer;
-					letter-spacing: 0.05rem;
-					@include appearance(none);					
-				}
-				.label{
-					position: absolute;
-					top:50%;
-					left:0;
-					width:100%;
-					text-align: center;
-					font-family: $mono;
-					color: white;
-					font-size: 0.75rem;
-					@include transform(translateY(-50%));
-					visibility: hidden;
-				}
-				&.success{
-					input{visibility: hidden;}
-					.label.success{
-						visibility: visible;
-					}
-				}
-				&.error{
-					input{visibility: hidden;}
-					.label.error{
-						visibility: visible;
-					}
-				}
+		hgroup{
+			width: 100%;
+			margin: 50px 0 150px;
+			padding: 0 60px;
+		}
+		article{
+			margin: 60px 60px 60px 60px;
+			p{
+				max-width: 100%;
+				margin: 0 0 30px 0;
+			}	
+			ul{
+				//text-align: center;
+				margin:100px 0 100px;
+			}		
+		}
 
-			}
+	}
+	video{
+		display: none;
+	}
+}
+@include breakpoint(mobile-landscape){
+	#about{
+		#is{
+			position: absolute;
+			padding-top: 120px;
+			padding-left: 150px;
 		}
-		&:nth-of-type(2){
-			top:50vh;
-			h1{
-				font-family: $narrow;
-				em{
-					font-family: $serif;
-				}
-			}
+		hgroup{
+			width: 75%;
+			margin-top: 200px;
+			margin-left: 25%;
+			padding-right: 60px;
+			margin-bottom: 60px;
 		}
-		&:hover{
-			background: black;
-			h1{
-				color: white;
-			}
-			aside{
-				display: block;
+		article{
+			margin:0 0 0 150px;
+			width: 50%;
+			padding: 0 60px 0 0;
+			ul{
+				margin-top: 60px;
 			}
 		}
 	}
