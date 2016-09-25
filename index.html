@@ -50,7 +50,7 @@
 			</p>
 		</article>
 	</section>
-	<video autoplay loop mute>
+	<video preload="none" loop mute>
 		<source src="assets/video/fpo.mp4" type="video/mp4">
 	</video>
 	<section id="contact">
@@ -63,9 +63,11 @@
 		<article>
 			<h1>Get <em>Email</em></h1>
 			<aside>
-				<form>
-					<input  type="text" placeholder="your@address.com" />
-					<input type="submit" value="Subscribe" />
+				<form action="http://hyperverve.us14.list-manage.com/subscribe/post-json?u=52b38d5de07a494ae2e9ca619&id=31e642ccee" method="GET" novalidate>
+					<input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="your@address.com">
+				    <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe">
+					<span class="label success">Please verify your email.</span>
+					<span class="label error">Error. Try again later.</span>
 				</form>
 			</aside>
 		</article>

@@ -4,9 +4,9 @@
 	padding-bottom: 25vw;
 	@extend %clearfix;
 	#is{
-		position: fixed;
-		left:200px;
-		top:200px;
+		position: relative;
+		padding-left:200px;
+		padding-top:200px;
 		text-align: left;
 		display: block;
 		font-family: $serif;
@@ -17,8 +17,8 @@
 	hgroup{
 		position: relative;
 		z-index: 100;
-		width: 75%;
-		margin: 300px auto 150px 25%;
+		width: 60%;
+		margin: 50px 60px 150px 30%;
 		h1{
 			font-family: $sans;
 			font-weight: bold;
@@ -56,18 +56,18 @@
 video{
 	position: absolute;
 	z-index: 100;
-	left:60px;
+	left:40px;
 	top:100%;
 	margin-top: -20px;
 	height: auto;
-	@include calc('width','50% - 120px');
+	@include calc('width','50% - 100px');
 	visibility: hidden;
 	@include opacity(0);
 	box-shadow: 0 5px 20px rgba(0,0,0,0.2);
 	@include transition(opacity 0s $ease 0s, 0s transform);
 }
-.show-about video{
-	@include transition(opacity 0.5s $ease 1.2s, 0s transform);
+.show-about.interior video{
+	@include transition(opacity 0.5s $ease 0s, 0s transform);
 	@include opacity(1);
 	visibility: visible;
 }
@@ -121,7 +121,7 @@ video{
 				width: 300px;
 				margin: 0 auto;
 				text-align: center;
-				input[type=text]{
+				input[type=email]{
 					background: transparent;
 					border:none;
 					border-bottom: 3px solid white;
@@ -152,6 +152,31 @@ video{
 					letter-spacing: 0.05rem;
 					@include appearance(none);					
 				}
+				.label{
+					position: absolute;
+					top:50%;
+					left:0;
+					width:100%;
+					text-align: center;
+					font-family: $mono;
+					color: white;
+					font-size: 0.75rem;
+					@include transform(translateY(-50%));
+					visibility: hidden;
+				}
+				&.success{
+					input{visibility: hidden;}
+					.label.success{
+						visibility: visible;
+					}
+				}
+				&.error{
+					input{visibility: hidden;}
+					.label.error{
+						visibility: visible;
+					}
+				}
+
 			}
 		}
 		&:nth-of-type(2){

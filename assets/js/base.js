@@ -63,7 +63,6 @@ $(document)
 .on('mousedown touchstart', onDocumentMouseDown)
 .on('mouseup touchend', onDocumentMouseUp);
 $('section#about').scroll(function(){
-	$('#about #is').css('transform','translateX(-'+$(this).scrollTop()+'px)');
 	$('video').css('transform','translateY(-'+$(this).scrollTop()+'px)');
 });
 $('#about-btn').click(function(e){
@@ -174,6 +173,7 @@ function onDocumentMouseDown(event) {
 		$body.removeClass('interior');
 		$body.removeClass('show-about');
 		$body.removeClass('show-contact');
+		$('video').get(0).pause();			
 		$('section').removeClass('active');
 		$('section').removeClass('done');
 	}
@@ -221,14 +221,44 @@ function onAboutClick(event) {
 			$('#about').addClass('done');
 			$body.addClass('interior');
 			glitchPass.goWild = false;
+			$('video').get(0).play();			
 		},600);
 	});
 }
+var $form = $('#contact form');
+if ( $form.length > 0 ) {
+    $('form input[type="submit"]').bind('click', function ( event ) {
+        if ( event ) event.preventDefault();
+		register($form);
+    });
+}
+function register($form) {
+$.ajax({
+    type: $form.attr('method'),
+    url: $form.attr('action'),
+    data: $form.serialize(),
+    cache       : false,
+    dataType    : 'jsonp',
+	jsonp: 'c',
+    contentType: 'application/json; charset=utf-8',
+    success     : function(data) {
+        if (data.result != "success") {
+            $form.removeClass('success');
+            $form.addClass('error');
+        } else {
+            $form.removeClass('error');
+            $form.addClass('success');
+        }
+    }
+});
+}
+
 function onContactClick(event) {
 	$tweenSpeed = 600;
 	glitchPass.goWild = false;
 	if($body.hasClass('show-about')){
 		$tweenSpeed = 1200;
+		$('video').get(0).pause();			
 		$('#about').removeClass('done');
 		$('#about').removeClass('active');
 		$body.removeClass('interior');
