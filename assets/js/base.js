@@ -69,11 +69,17 @@ if($audio){
 		analyser.getByteFrequencyData(frequencyData);
 	}
 }
-var url = $(location).attr('href').split("/").splice(0, 5).join("/");
+var url = $(location).attr('href').split('/').splice(0, 5).join('/');
 var segments = url.split( '/' );
 var action = segments[3];
+if(action){
+	url = window.location.protocol + '//' + window.location.host+ '/';
+	if(url.indexOf('github') >= 0){
+		url = 'https://danielgivens.github.io/hyperverve/';
+	}
+}
 init();
-//animate();
+animate();
 $scrolled = 0;
 $(document)
 .on('mousemove', onDocumentMouseMove)
@@ -89,17 +95,17 @@ $(document)
 });
 $('#about-btn').click(function(e){
 	//onAboutClick(e);
-	History.pushState({state:2}, 'ABOUT','/about');
+	History.pushState({state:2}, 'ABOUT',url+'about');
 	e.preventDefault();
 });
 $('#contact-btn').click(function(e){
 	//onContactClick(e);
-	History.pushState({state:3}, 'CONTACT','/contact');
+	History.pushState({state:3}, 'CONTACT',url+'contact');
 	e.preventDefault();
 });
 $('.logo').mousedown(function(e){
 	$interior=false;
-	History.pushState({state:1}, 'HYPER VERVE','/');
+	History.pushState({state:1}, 'HYPER VERVE',url);
 	//onDocumentMouseDown(e);
 });
 $('#mute').click(function(){
@@ -121,6 +127,7 @@ function init() {
 		        break;
 		    case 2:
 		        onAboutClick();
+		        console.log('about');
 		        break;
 		    case 3:
 		        onContactClick();
@@ -128,10 +135,6 @@ function init() {
 		}   
 	});
 
-	if($audio){
-		$body.addClass('audio');
-		loadSound('assets/audio/loop.mp3');
-	}
 	container = document.createElement( 'div' );
 	$(container).attr('id','bg');
 	document.body.appendChild( container );
@@ -227,11 +230,10 @@ function register($form) {
 	    }
 	});
 }
-
 function onScroll(delta){
 	if($body.hasClass('show-about')){
 		$scrolled = $scrolled + delta/10;
-	    $max = ($('#about').height() - $(window).height()) *-1;
+	    $max = ($('#about').outerHeight() - $(window).height()) *-1;
 		if($scrolled >= 0){
 			$scrolled = 0;
 		}
@@ -241,7 +243,6 @@ function onScroll(delta){
 	    $('#about').css('transform','translateY('+$scrolled+'px)');
 		$('video').css('transform','translateY('+$scrolled+'px)');
     }
-	
 }
 function onDocumentMouseDown(event) {
 	if(!event || $(event.target).attr('id') != 'about-btn' && $(event.target).attr('id') != 'contact-btn' && !$interior){
@@ -382,6 +383,7 @@ function onContactClick(event) {
 }
 currentY = 0;
 startingY = 0;
+$meshCount = 0;
 function onDocumentMouseMove(event) {
 	e=event;
 	mouseX = ( event.clientX - windowHalfX )*3;
@@ -421,12 +423,23 @@ function onDocumentMouseUp(event){
 THREE.DefaultLoadingManager.onProgress = function ( item, loaded, total ) {
     if(loaded === total){
 	    $mesh = true;
-	    $body.addClass('loaded');
-	    animate();
-		if(action == 'about'){
-			onAboutClick();
-		} else if(action == 'contact'){
-			onContactClick();
+	    $meshCount++;
+	    if($meshCount == 1){
+		    $body.addClass('loaded');
+			if(action == 'about'){
+				onAboutClick();
+				History.pushState({state:2}, 'ABOUT',url+'about');
+			} else if(action == 'contact'){
+				onContactClick();
+				History.pushState({state:3}, 'CONTACT',url+'contact');
+			} else{
+				onDocumentMouseDown();
+				History.pushState({state:1}, 'HYPER VERVE',url);
+			}
+			if($audio){
+				$body.addClass('audio');
+				loadSound('assets/audio/loop.mp3');
+			}
 		}
     }
 };
