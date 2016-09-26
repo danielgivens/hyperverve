@@ -3,8 +3,6 @@
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RedirectMatch 301 ^/about/(.*)$ http://hyperverve.com/about
 	RedirectMatch 301 ^/contact/(.*)$ http://hyperverve.com/contact
-	RedirectMatch 301 ^/hyperverve/(.*)$ http://hyperverve.com
-
 	RewriteRule ^(.*)/$ /$1 [L,R=301]	
     RewriteCond %{REQUEST_FILENAME} !\.(js|css|gif|jpg|jpeg|png|ico|swf|pdf|html|php|json|ttf|woff|mp3|mp4|map|svg)$
     RewriteCond %{REQUEST_URI} !^index
