@@ -78,7 +78,6 @@ video{
 	@include calc('width','50% - 100px');
 	visibility: hidden;
 	@include opacity(0);
-	box-shadow: 0 5px 20px rgba(0,0,0,0.2);
 	@include transition(opacity 0s $ease 0s, 0s transform);
 }
 .show-about.interior video{
