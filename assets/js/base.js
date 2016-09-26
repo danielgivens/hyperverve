@@ -72,6 +72,7 @@ if($audio){
 var url = $(location).attr('href').split('/').splice(0, 5).join('/');
 var segments = url.split( '/' );
 var action = segments[3];
+console.log(action);
 if(action){
 	url = window.location.protocol + '//' + window.location.host+ '/';
 	if(url.indexOf('github') >= 0){
