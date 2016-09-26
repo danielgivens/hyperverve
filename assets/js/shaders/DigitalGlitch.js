@@ -90,7 +90,7 @@ THREE.DigitalGlitch = {
 				"vec4 cb = texture2D(tDiffuse, p - offset);",
 				"gl_FragColor = vec4(cr.r, cga.g, cb.b, cga.a);",
 				//add noise
-				"vec4 snow = 200.*amount*vec4(rand(vec2(xs * seed,ys * seed*50.))*0.2);",
+				"vec4 snow = 200.*amount*vec4(rand(vec2(xs * seed,ys * seed*50.))*0.33);",
 				"gl_FragColor = gl_FragColor+ snow;",
 			"}",
 			"else {",

@@ -1,4 +1,4 @@
-var container, stats, camera, scene, renderer, mesh, geometry, model, loader, pointLight, $wild;
+var container, stats, camera, scene, renderer, mesh, geometry, model, loader, pointLight, $wild, $aboutDone, $contactDone;
 $body = $('body');
 $y = 0;
 $m = 0;
@@ -70,7 +70,7 @@ if($audio){
 	}
 }
 init();
-animate();
+//animate();
 $scrolled = 0;
 $(document)
 .on('mousemove', onDocumentMouseMove)
@@ -173,6 +173,7 @@ function createScene( geometry, m2 ) {
 	mesh.scale.x = mesh.scale.y = mesh.scale.z = s;
 	model = new THREE.Object3D();
 	model.add(mesh);
+	model.scale.set(1,1,1);
 	model.rotation.set(0,0,0);
 	scene.add(model);
 	render();
@@ -238,11 +239,15 @@ function onDocumentMouseDown(event) {
 		$('video').get(0).pause();			
 		$('section').removeClass('active');
 		$('section').removeClass('done');
+		clearTimeout($aboutDone);
+		clearTimeout($contactDone);
 	}
 }
 function onAboutClick(event) {
 	$tweenSpeed = 600;
 	glitchPass.goWild = false;
+	clearTimeout($aboutDone);
+	clearTimeout($contactDone);
 	if($body.hasClass('show-contact')){
 		$tweenSpeed = 1200;
 		$('#contact').removeClass('done');
@@ -262,6 +267,7 @@ function onAboutClick(event) {
 	tween1.start();
 	tween2.start();
 	$scrolled = 0;
+	$('#about').css('transform','translateY(0px)');
 	$('video').css('transform','translateY(0px)');
 	tween2.onComplete(function() {
 		if(!isMobile){
@@ -283,7 +289,7 @@ function onAboutClick(event) {
 		setTimeout(function(){
 			$('#about').removeClass('active');
 		},300);		
-		setTimeout(function(){
+		$aboutDone = setTimeout(function(){
 			$('#about').addClass('active');
 			$('#about').addClass('done');
 			$body.addClass('interior');
@@ -301,6 +307,8 @@ function onAboutClick(event) {
 function onContactClick(event) {
 	$tweenSpeed = 600;
 	glitchPass.goWild = false;
+	clearTimeout($aboutDone);
+	clearTimeout($contactDone);
 	if($body.hasClass('show-about')){
 		$tweenSpeed = 1200;
 		$('video').get(0).pause();			
@@ -335,7 +343,7 @@ function onContactClick(event) {
 		setTimeout(function(){
 			$('#contact').removeClass('active');
 		},300);		
-		setTimeout(function(){
+		$aboutDone = setTimeout(function(){
 			$('#contact').addClass('active');
 			$('#contact').addClass('done');
 			$('video').get(0).pause();			
@@ -389,6 +397,8 @@ THREE.DefaultLoadingManager.onProgress = function ( item, loaded, total ) {
     if(loaded === total){
 	    $mesh = true;
 	    $body.addClass('loaded');
+	    animate();
+
     }
 };
 function animate() {
@@ -477,7 +487,7 @@ function loadSound(url) {
 							model.traverse( function ( object ) { object.visible = true; } );
 						},150);    
 				    }
-				    if(array[4] > 220){
+				    if(array[4] > 200){
 					    if(!$enableMove && !$interior){
 						    glitchPass.Hits = array[4]/100;
 						} else{
@@ -493,7 +503,7 @@ function loadSound(url) {
 				    } else{
 					   model.rotation.x = 0;
 				    }
-				    if(array[0] > 245){
+				    if(array[0] > 220){
 					    if(!$enableMove && !$interior){
 							model.rotation.z += array[0]/100000; 
 						}

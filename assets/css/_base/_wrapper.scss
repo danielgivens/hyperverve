@@ -9,6 +9,10 @@ body {
 	background: #191919;
 	overflow: hidden;
 }
+#bg{
+	@include opacity(0);
+	@include transition(opacity 2s $ease);
+}
 .logo{
 	position:absolute;
 	top:60px;
@@ -75,6 +79,9 @@ nav{
 	#loading{
 		display: none;	
 	}
+	#bg{
+		@include opacity(1);
+	}
 	&.audio{
 		#mute{
 			display: block;
@@ -86,6 +93,20 @@ nav{
 		}
 
 	}
+	&.show-contact,
+	&.show-about{
+		#bg{
+			@include transition(opacity 0s $ease);
+			
+		}
+	}
+	&.interior{
+		#bg{
+			@include opacity(0.25);
+			@include transition(opacity 0.2s $ease);
+		}
+		
+	}	
 }
 section{
 	position: absolute;
@@ -100,11 +121,6 @@ section{
 	z-index: 100;
 	&.active{
 		display: block;
-	}
-}
-.interior{
-	#bg{
-		opacity: 0.2;
 	}
 }
 
