@@ -127,7 +127,6 @@ function init() {
 		        break;
 		    case 2:
 		        onAboutClick();
-		        console.log('about');
 		        break;
 		    case 3:
 		        onContactClick();
@@ -470,7 +469,6 @@ function render() {
 		}
 	}
 	if($enableMove){
-		//console.log(camera.position.x);
 		if(!isMobile){
 			if($interior){
 				//model.rotation.z = (mouseY - model.rotation.z) *0.001;
@@ -497,7 +495,6 @@ function loadSound(url) {
             var soundLength = buffer.duration;
 			sampleBuffer = buffer;
 			playSound(0);
-			//console.log(soundLength);
 			$visualizer = setInterval(function(){
 				if($audio && $playing){
 					array = new Uint8Array(analyser.frequencyBinCount);
