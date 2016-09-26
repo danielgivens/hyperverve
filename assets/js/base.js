@@ -90,17 +90,17 @@ $(document)
 });
 $('#about-btn').click(function(e){
 	//onAboutClick(e);
-	History.pushState({state:2}, 'ABOUT','/about');
+	History.pushState({state:2}, 'ABOUT',url+'about');
 	e.preventDefault();
 });
 $('#contact-btn').click(function(e){
 	//onContactClick(e);
-	History.pushState({state:3}, 'CONTACT','/contact');
+	History.pushState({state:3}, 'CONTACT',url+'contact');
 	e.preventDefault();
 });
 $('.logo').mousedown(function(e){
 	$interior=false;
-	History.pushState({state:1}, 'HYPER VERVE','/');
+	History.pushState({state:1}, 'HYPER VERVE',url);
 	//onDocumentMouseDown(e);
 });
 $('#mute').click(function(){
