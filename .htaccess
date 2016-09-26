@@ -1,7 +1,5 @@
 <ifModule mod_rewrite.c>
 	RewriteEngine on
-	RewriteRule ^hyperverve/(.*)$ /hyperverve/#$1 [L]
-    RewriteEngine On
     RewriteCond %{REQUEST_FILENAME} !\.(js|css|gif|jpg|jpeg|png|ico|swf|pdf|html|php|json|ttf|woff|mp3|mp4|map|svg)$
     RewriteCond %{REQUEST_URI} !^index
     RewriteRule (.*) index.html [L]
