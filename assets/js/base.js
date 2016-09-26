@@ -74,7 +74,9 @@ var segments = url.split( '/' );
 var action = segments[3];
 if(action){
 	url = window.location.protocol + '//' + window.location.host+ '/';
-	console.log(url);
+	if(url.indexOf('github') >= 0){
+		url = 'https://danielgivens.github.io/hyperverve';
+	}
 }
 init();
 animate();
