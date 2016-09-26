@@ -429,6 +429,8 @@ THREE.DefaultLoadingManager.onProgress = function ( item, loaded, total ) {
 			onAboutClick();
 		} else if(action == 'contact'){
 			onContactClick();
+		} else{
+			onMouseDown();
 		}
 		if($audio){
 			$body.addClass('audio');
