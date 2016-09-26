@@ -29,7 +29,7 @@ if(isMobile){
 	$about = 'about-mobile';
 	$contact = 'contact-mobile';
 } 
-path = "assets/images/cube/";
+path = "../assets/images/cube/";
 format = '.png';
 urls = [
 	path + $about + format, path + $contact + format,
@@ -37,9 +37,9 @@ urls = [
 	path + 'blank' + format, path + $bg + format
 ];
 var models = [
-    "assets/models/logo1.json",
-    "assets/models/logo2.json",
-    "assets/models/logo3.json"    
+    "../assets/models/logo1.json",
+    "../assets/models/logo2.json",
+    "../assets/models/logo3.json"    
 
 ]
 var model = models[Math.floor(Math.random()*models.length)];
@@ -69,10 +69,13 @@ if($audio){
 		analyser.getByteFrequencyData(frequencyData);
 	}
 }
-var url = $(location).attr('href').split("/").splice(0, 5).join("/");
+var url = $(location).attr('href').split('/').splice(0, 5).join('/');
 var segments = url.split( '/' );
 var action = segments[3];
-console.log(url);
+if(action){
+	url = window.location.protocol + '//' + window.location.host+ '/';
+	console.log(url);
+}
 init();
 animate();
 $scrolled = 0;
@@ -426,7 +429,7 @@ THREE.DefaultLoadingManager.onProgress = function ( item, loaded, total ) {
 		}
 		if($audio){
 			$body.addClass('audio');
-			loadSound('assets/audio/loop.mp3');
+			loadSound('../assets/audio/loop.mp3');
 		}
 
     }
