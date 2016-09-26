@@ -69,6 +69,9 @@ if($audio){
 		analyser.getByteFrequencyData(frequencyData);
 	}
 }
+var url = $(location).attr('href').split("/").splice(0, 5).join("/");
+var segments = url.split( '/' );
+var action = segments[3];
 init();
 //animate();
 $scrolled = 0;
@@ -85,16 +88,19 @@ $(document)
 	    e.preventDefault();
 });
 $('#about-btn').click(function(e){
-	onAboutClick(e);
+	//onAboutClick(e);
+	History.pushState({state:2}, 'ABOUT','/about');
 	e.preventDefault();
 });
 $('#contact-btn').click(function(e){
-	onContactClick(e);
+	//onContactClick(e);
+	History.pushState({state:3}, 'CONTACT','/contact');
 	e.preventDefault();
 });
 $('.logo').mousedown(function(e){
 	$interior=false;
-	onDocumentMouseDown(e);
+	History.pushState({state:1}, 'HYPER VERVE','/');
+	//onDocumentMouseDown(e);
 });
 $('#mute').click(function(){
 	if($body.hasClass('muted')){
@@ -106,6 +112,22 @@ $('#mute').click(function(){
 	}
 });
 function init() {
+    History.Adapter.bind(window,'statechange',function(){
+        var State = History.getState(); 
+	    $code = State.data.state;
+		switch($code) {
+		    case 1:
+		        onDocumentMouseDown();
+		        break;
+		    case 2:
+		        onAboutClick();
+		        break;
+		    case 3:
+		        onContactClick();
+		        break;
+		}   
+	});
+
 	if($audio){
 		$body.addClass('audio');
 		loadSound('assets/audio/loop.mp3');
@@ -222,7 +244,7 @@ function onScroll(delta){
 	
 }
 function onDocumentMouseDown(event) {
-	if($(event.target).attr('id') != 'about-btn' && $(event.target).attr('id') != 'contact-btn' && !$interior){
+	if(!event || $(event.target).attr('id') != 'about-btn' && $(event.target).attr('id') != 'contact-btn' && !$interior){
 		glitchPass.Hits = 0.2;
 		model.traverse( function ( object ) { object.visible = true; } );
 		$speed = -.025;
@@ -241,6 +263,9 @@ function onDocumentMouseDown(event) {
 		$('section').removeClass('done');
 		clearTimeout($aboutDone);
 		clearTimeout($contactDone);
+		if(!event){
+			onDocumentMouseUp();
+		}
 	}
 }
 function onAboutClick(event) {
@@ -375,7 +400,7 @@ function pauseEvent(e){
     return false;
 }
 function onDocumentMouseUp(event){
-	if($(event.target).attr('id') != 'about-btn' && $(event.target).attr('id') != 'contact-btn' && !$interior){
+	if(!event || $(event.target).attr('id') != 'about-btn' && $(event.target).attr('id') != 'contact-btn' && !$interior){
 		$speed = 0.005;
 		glitchPass.goWild = false;
 		$enableMove= false;
@@ -398,7 +423,11 @@ THREE.DefaultLoadingManager.onProgress = function ( item, loaded, total ) {
 	    $mesh = true;
 	    $body.addClass('loaded');
 	    animate();
-
+		if(action == 'about'){
+			onAboutClick();
+		} else if(action == 'contact'){
+			onContactClick();
+		}
     }
 };
 function animate() {
