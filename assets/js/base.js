@@ -75,7 +75,7 @@ var action = segments[3];
 if(action){
 	url = window.location.protocol + '//' + window.location.host+ '/';
 	if(url.indexOf('github') >= 0){
-		url = 'https://danielgivens.github.io/hyperverve';
+		url = 'https://danielgivens.github.io/hyperverve/';
 	}
 }
 init();
