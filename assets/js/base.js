@@ -72,8 +72,9 @@ if($audio){
 var url = $(location).attr('href').split("/").splice(0, 5).join("/");
 var segments = url.split( '/' );
 var action = segments[3];
+console.log(url);
 init();
-//animate();
+animate();
 $scrolled = 0;
 $(document)
 .on('mousemove', onDocumentMouseMove)
@@ -128,10 +129,6 @@ function init() {
 		}   
 	});
 
-	if($audio){
-		$body.addClass('audio');
-		loadSound('assets/audio/loop.mp3');
-	}
 	container = document.createElement( 'div' );
 	$(container).attr('id','bg');
 	document.body.appendChild( container );
@@ -422,12 +419,16 @@ THREE.DefaultLoadingManager.onProgress = function ( item, loaded, total ) {
     if(loaded === total){
 	    $mesh = true;
 	    $body.addClass('loaded');
-	    animate();
 		if(action == 'about'){
 			onAboutClick();
 		} else if(action == 'contact'){
 			onContactClick();
 		}
+		if($audio){
+			$body.addClass('audio');
+			loadSound('assets/audio/loop.mp3');
+		}
+
     }
 };
 function animate() {
