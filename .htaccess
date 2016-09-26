@@ -1,8 +1,6 @@
 <ifModule mod_rewrite.c>
 	RewriteEngine on
 	RewriteCond %{REQUEST_FILENAME} !-d
-	#RedirectMatch 301 ^/about/(.*)$ http://hyperverve.com/about
-	#RedirectMatch 301 ^/contact/(.*)$ http://hyperverve.com/contact
     RewriteCond %{REQUEST_FILENAME} !\.(js|css|gif|jpg|jpeg|png|ico|swf|pdf|html|php|json|ttf|woff|mp3|mp4|map|svg)$
     RewriteCond %{REQUEST_URI} !^index
     RewriteRule (.*) index.html [L]
