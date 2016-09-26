@@ -1,4 +1,4 @@
-var container, stats, camera, scene, renderer, mesh, geometry, model, loader, pointLight, $wild;
+var container, stats, camera, scene, renderer, mesh, geometry, model, loader, pointLight, $wild, $aboutDone, $contactDone;
 $body = $('body');
 $y = 0;
 $m = 0;
@@ -36,11 +36,24 @@ urls = [
 	path + 'blank' + format, path + 'blank' + format,
 	path + 'blank' + format, path + $bg + format
 ];
+var models = [
+    "assets/models/logo1.json",
+    "assets/models/logo2.json",
+    "assets/models/logo3.json"    
+
+]
+var model = models[Math.floor(Math.random()*models.length)];
+
 var jsonModelURL = [ 
-    "assets/models/hv2.json",
+    model
 ];
 if (document.documentMode || /Edge/.test(navigator.userAgent)) {
     $ie = true;    
+}
+if('CSS' in window && 'supports' in window.CSS) {
+    var support = window.CSS.supports('mix-blend-mode','soft-light');
+        support = support?'mix-blend-mode':'no-mix-blend-mode';
+        $('html').addClass(support);
 }
 if($audio){
 	var audioContext = new(window.AudioContext || window.webkitAudioContext)(),
@@ -56,26 +69,38 @@ if($audio){
 		analyser.getByteFrequencyData(frequencyData);
 	}
 }
+var url = $(location).attr('href').split("/").splice(0, 5).join("/");
+var segments = url.split( '/' );
+var action = segments[3];
 init();
-animate();
+//animate();
+$scrolled = 0;
 $(document)
 .on('mousemove', onDocumentMouseMove)
 .on('mousedown touchstart', onDocumentMouseDown)
-.on('mouseup touchend', onDocumentMouseUp);
-$('section#about').scroll(function(){
-	$('video').css('transform','translateY(-'+$(this).scrollTop()+'px)');
+.on('mouseup touchend', onDocumentMouseUp)
+.on('mousewheel DOMMouseScroll', function (e) {
+		var delta = e.originalEvent.detail;
+		if(!delta){
+			delta =  e.originalEvent.wheelDelta;
+		}
+		onScroll(delta);
+	    e.preventDefault();
 });
 $('#about-btn').click(function(e){
-	onAboutClick(e);
+	//onAboutClick(e);
+	History.pushState({state:2}, 'ABOUT','/about');
 	e.preventDefault();
 });
 $('#contact-btn').click(function(e){
-	onContactClick(e);
+	//onContactClick(e);
+	History.pushState({state:3}, 'CONTACT','/contact');
 	e.preventDefault();
 });
-$('#logo').mousedown(function(e){
+$('.logo').mousedown(function(e){
 	$interior=false;
-	onDocumentMouseDown(e);
+	History.pushState({state:1}, 'HYPER VERVE','/');
+	//onDocumentMouseDown(e);
 });
 $('#mute').click(function(){
 	if($body.hasClass('muted')){
@@ -87,6 +112,22 @@ $('#mute').click(function(){
 	}
 });
 function init() {
+    History.Adapter.bind(window,'statechange',function(){
+        var State = History.getState(); 
+	    $code = State.data.state;
+		switch($code) {
+		    case 1:
+		        onDocumentMouseDown();
+		        break;
+		    case 2:
+		        onAboutClick();
+		        break;
+		    case 3:
+		        onContactClick();
+		        break;
+		}   
+	});
+
 	if($audio){
 		$body.addClass('audio');
 		loadSound('assets/audio/loop.mp3');
@@ -154,12 +195,56 @@ function createScene( geometry, m2 ) {
 	mesh.scale.x = mesh.scale.y = mesh.scale.z = s;
 	model = new THREE.Object3D();
 	model.add(mesh);
+	model.scale.set(1,1,1);
 	model.rotation.set(0,0,0);
 	scene.add(model);
 	render();
 }
+var $form = $('#contact form');
+if ( $form.length > 0 ) {
+    $('form input[type="submit"]').bind('click', function ( event ) {
+        if ( event ) event.preventDefault();
+		register($form);
+    });
+}
+function register($form) {
+	$.ajax({
+	    type: $form.attr('method'),
+	    url: $form.attr('action'),
+	    data: $form.serialize(),
+	    cache       : false,
+	    dataType    : 'jsonp',
+		jsonp: 'c',
+	    contentType: 'application/json; charset=utf-8',
+	    success     : function(data) {
+	        if (data.result != "success") {
+	            $form.removeClass('success');
+	            $form.addClass('error');
+	        } else {
+	            $form.removeClass('error');
+	            $form.addClass('success');
+	        }
+	    }
+	});
+}
+
+function onScroll(delta){
+	if($body.hasClass('show-about')){
+		$scrolled = $scrolled + delta/10;
+	    $max = ($('#about').height() - $(window).height()) *-1;
+		if($scrolled >= 0){
+			$scrolled = 0;
+		}
+		if($scrolled <= $max){
+			$scrolled = $max;
+		}
+	    $('#about').css('transform','translateY('+$scrolled+'px)');
+		$('video').css('transform','translateY('+$scrolled+'px)');
+    }
+	
+}
 function onDocumentMouseDown(event) {
-	if($(event.target).attr('id') != 'about-btn' && $(event.target).attr('id') != 'contact-btn' && !$interior){
+	if(!event || $(event.target).attr('id') != 'about-btn' && $(event.target).attr('id') != 'contact-btn' && !$interior){
 		glitchPass.Hits = 0.2;
 		model.traverse( function ( object ) { object.visible = true; } );
 		$speed = -.025;
@@ -176,11 +261,18 @@ function onDocumentMouseDown(event) {
 		$('video').get(0).pause();			
 		$('section').removeClass('active');
 		$('section').removeClass('done');
+		clearTimeout($aboutDone);
+		clearTimeout($contactDone);
+		if(!event){
+			onDocumentMouseUp();
+		}
 	}
 }
 function onAboutClick(event) {
 	$tweenSpeed = 600;
 	glitchPass.goWild = false;
+	clearTimeout($aboutDone);
+	clearTimeout($contactDone);
 	if($body.hasClass('show-contact')){
 		$tweenSpeed = 1200;
 		$('#contact').removeClass('done');
@@ -199,6 +291,9 @@ function onAboutClick(event) {
 	$body.addClass('show-about');
 	tween1.start();
 	tween2.start();
+	$scrolled = 0;
+	$('#about').css('transform','translateY(0px)');
+	$('video').css('transform','translateY(0px)');
 	tween2.onComplete(function() {
 		if(!isMobile){
 			$speed = 0;
@@ -212,50 +307,33 @@ function onAboutClick(event) {
 		},100);
 		setTimeout(function(){
 			$('#about').addClass('active');
+			if(!isMobile){
+				$('#about').css('transform','translateY(-50px)');
+			}
 		},200);
 		setTimeout(function(){
 			$('#about').removeClass('active');
 		},300);		
-		setTimeout(function(){
+		$aboutDone = setTimeout(function(){
 			$('#about').addClass('active');
 			$('#about').addClass('done');
 			$body.addClass('interior');
+			$('#contact').removeClass('done');
+			$('#contact').removeClass('active');
+			
 			glitchPass.goWild = false;
-			$('video').get(0).play();			
+			$('video').get(0).play();	
+			$('#about').css('transform','translateY(0px)');
+			$('video').css('transform','translateY(0px)');
+			$('video').css('top',parseInt($('#about hgroup').outerHeight())+parseInt($('#about hgroup').offset().top)+300+'px');
 		},600);
 	});
 }
-var $form = $('#contact form');
-if ( $form.length > 0 ) {
-    $('form input[type="submit"]').bind('click', function ( event ) {
-        if ( event ) event.preventDefault();
-		register($form);
-    });
-}
-function register($form) {
-$.ajax({
-    type: $form.attr('method'),
-    url: $form.attr('action'),
-    data: $form.serialize(),
-    cache       : false,
-    dataType    : 'jsonp',
-	jsonp: 'c',
-    contentType: 'application/json; charset=utf-8',
-    success     : function(data) {
-        if (data.result != "success") {
-            $form.removeClass('success');
-            $form.addClass('error');
-        } else {
-            $form.removeClass('error');
-            $form.addClass('success');
-        }
-    }
-});
-}
-
 function onContactClick(event) {
 	$tweenSpeed = 600;
 	glitchPass.goWild = false;
+	clearTimeout($aboutDone);
+	clearTimeout($contactDone);
 	if($body.hasClass('show-about')){
 		$tweenSpeed = 1200;
 		$('video').get(0).pause();			
@@ -290,22 +368,28 @@ function onContactClick(event) {
 		setTimeout(function(){
 			$('#contact').removeClass('active');
 		},300);		
-		setTimeout(function(){
+		$aboutDone = setTimeout(function(){
 			$('#contact').addClass('active');
 			$('#contact').addClass('done');
+			$('video').get(0).pause();			
+			$('#about').removeClass('done');
+			$('#about').removeClass('active');
+			
 			$body.addClass('interior');
 			glitchPass.goWild = false;
 		},600);
 	});
 }
+currentY = 0;
+startingY = 0;
 function onDocumentMouseMove(event) {
+	e=event;
 	mouseX = ( event.clientX - windowHalfX )*3;
 	mouseY = ( event.clientY - windowHalfY )*3;
 	if($enableMove && $audio && sound && !$interior){
 		glitchPass.goWild = true;
 		sound.detune.value = ( event.clientY - windowHalfY )/2;
 	} 
-	e=event;
 	pauseEvent(e);	
 }
 function pauseEvent(e){
@@ -316,7 +400,7 @@ function pauseEvent(e){
     return false;
 }
 function onDocumentMouseUp(event){
-	if($(event.target).attr('id') != 'about-btn' && $(event.target).attr('id') != 'contact-btn' && !$interior){
+	if(!event || $(event.target).attr('id') != 'about-btn' && $(event.target).attr('id') != 'contact-btn' && !$interior){
 		$speed = 0.005;
 		glitchPass.goWild = false;
 		$enableMove= false;
@@ -337,6 +421,13 @@ function onDocumentMouseUp(event){
 THREE.DefaultLoadingManager.onProgress = function ( item, loaded, total ) {
     if(loaded === total){
 	    $mesh = true;
+	    $body.addClass('loaded');
+	    animate();
+		if(action == 'about'){
+			onAboutClick();
+		} else if(action == 'contact'){
+			onContactClick();
+		}
     }
 };
 function animate() {
@@ -393,7 +484,7 @@ function loadSound(url) {
             var soundLength = buffer.duration;
 			sampleBuffer = buffer;
 			playSound(0);
-			console.log(soundLength);
+			//console.log(soundLength);
 			$visualizer = setInterval(function(){
 				if($audio && $playing){
 					array = new Uint8Array(analyser.frequencyBinCount);
@@ -425,7 +516,7 @@ function loadSound(url) {
 							model.traverse( function ( object ) { object.visible = true; } );
 						},150);    
 				    }
-				    if(array[4] > 220){
+				    if(array[4] > 200){
 					    if(!$enableMove && !$interior){
 						    glitchPass.Hits = array[4]/100;
 						} else{
@@ -441,7 +532,7 @@ function loadSound(url) {
 				    } else{
 					   model.rotation.x = 0;
 				    }
-				    if(array[0] > 245){
+				    if(array[0] > 220){
 					    if(!$enableMove && !$interior){
 							model.rotation.z += array[0]/100000; 
 						}

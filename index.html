@@ -23,6 +23,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <script type="text/javascript" src="assets/js/jquery.js"></script>
 <script type="text/javascript" src="assets/js/plugins.js"></script>
+<script type="text/javascript" src="assets/js/history.js"></script>
 <script type="text/javascript" src="assets/js/three.min.js"></script>
 <script type="text/javascript" src="assets/js/libs/tween.min.js"></script>
 <script type="text/javascript" src="assets/js/loaders/BinaryLoader.js"></script>
@@ -45,12 +46,14 @@
 </script>
 </head>
 <body style="margin:0;">
-	<img src="assets/images/hv.svg" id="logo" />
+	<img src="assets/images/hv.svg" id="white" class="logo" />
+	<img src="assets/images/hv-black.svg" id="black" class="logo" />
 	<nav>
-		<a href="#" id="about-btn">About</a>
-		<a href="#" id="contact-btn">Contact</a>
+		<a href="/about" id="about-btn">About</a>
+		<a href="/contact" id="contact-btn">Contact</a>
 	</nav>
 	<span id="mute">Mute</span>
+	<span id="loading">Loading</span>
 	<section id="about">
 		<span id="is">is</span>
 		<hgroup>
@@ -67,9 +70,8 @@
 			</p>
 			<ul>
 				<li>Credits</li>
-				<li>Video by <a href="#" target="_blank">Need Name and Link</a></li>
-				<li>Music by <a href="https://soundcloud.com/shmucktheloyal" target="_blank">Shmuck the Loyal</a></li>
-				<li>Design by <a href="http://danielgivens.com" target="_blank">Daniel Givens</a></li>
+				<li>Video: <a href="#" target="_blank">Need Name and Link</a></li>
+				<li>Website: <a href="http://danielgivens.com" target="_blank">Daniel Givens</a></li>
 			</ul>
 		</article>
 	</section>
