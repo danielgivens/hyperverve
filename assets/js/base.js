@@ -463,7 +463,7 @@ function render() {
 			$amount = 0.00001;
 		}
 		if(mouseX < 0){
-			model.rotation.y -= (mouseX + model.rotation.y) * $amount;		
+			model.rotation.y -= (mouseX*1.5 + model.rotation.y) * $amount;		
 		} else{
 			model.rotation.y -= (mouseX - model.rotation.y) * $amount;		
 		}
