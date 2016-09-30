@@ -126,7 +126,7 @@
 			}
 		}
 	}
-	@include breakpoint(mobile){
+	@include breakpoint(tablet){
 		article{
 			h1{
 				em{
@@ -146,7 +146,7 @@
 			}
 		}
 	}
-	@include breakpoint(mobile-landscape){
+	@include breakpoint(tablet-landscape){
 		article{
 			aside{
 				form{
