@@ -82,16 +82,25 @@ if(action){
 init();
 animate();
 $scrolled = 0;
+window.addEventListener('mousewheel', mouseWheelEvent);
+window.addEventListener('DOMMouseScroll', mouseWheelEvent);
+
+function mouseWheelEvent(e) {
+    var delta = e.wheelDelta ? e.wheelDelta : -e.detail;
+}
 $(document)
 .on('mousemove', onDocumentMouseMove)
 .on('mousedown touchstart', onDocumentMouseDown)
 .on('mouseup touchend', onDocumentMouseUp)
 .on('mousewheel DOMMouseScroll', function (e) {
 		var delta = e.originalEvent.detail;
+		firefox = true;
 		if(!delta){
 			delta =  e.originalEvent.wheelDelta;
+			delta = delta/10;
+			firefox = false;
 		}
-		onScroll(delta);
+		onScroll(delta, firefox);
 	    e.preventDefault();
 });
 $('#about-btn').click(function(e){
@@ -241,10 +250,10 @@ function register($form) {
 	    }
 	});
 }
-function onScroll(delta){
+function onScroll(delta, firefox){
 	if($body.hasClass('show-about')){
-		$scrolled = $scrolled + delta/10;
-	    $max = ($('#about').outerHeight() - $(window).height()) *-1;
+		$scrolled = $scrolled + delta;
+		$max = ($('#about').outerHeight() - $(window).height()) *-1;		
 		if($scrolled >= 0){
 			$scrolled = 0;
 		}

@@ -40,7 +40,7 @@
 		    margin-bottom: 30px;
 		    &#block-mobile{
 			    display: none;
-			    @include breakpoint(mobile){
+			    @include breakpoint(tablet){
 				    display: block;
 			    }
 		    }
@@ -109,12 +109,12 @@ video{
 	@include transition(opacity 0.5s $ease 0s, 0s transform);
 	@include opacity(1);
 	visibility: visible;	
-	@include breakpoint(mobile){
+	@include breakpoint(tablet){
 		display: none;
 	}
 }
 
-@include breakpoint(mobile){
+@include breakpoint(tablet){
 	#about{
 		height: 100%;
 		overflow-x:hidden;
@@ -147,7 +147,7 @@ video{
 		display: none;
 	}
 }
-@include breakpoint(mobile-landscape){
+@include breakpoint(tablet-landscape){
 	#about{
 		#is{
 			position: absolute;
