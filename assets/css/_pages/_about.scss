@@ -35,11 +35,14 @@
 			max-width: 300px;
 		    line-height: 1.5;
 		    letter-spacing: 0.1rem;
-		    font-family: $serif;
+		    font-family: $mono;
 		    font-size: 0.9rem;
 		    text-align: justify;
 		    margin-left: 120px;
 		    margin-bottom: 30px;
+		    &:nth-of-type(1){
+			    min-height: 200px;
+		    }
 		    em{
 			    font-family: $narrow;
 			    font-weight: normal;

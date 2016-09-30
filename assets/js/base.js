@@ -133,7 +133,11 @@ function init() {
 		        break;
 		}   
 	});
-
+	$('#intro').typed({
+		strings: ['Record.','Mix.','Produce.','Manage.','Master.'],
+		typeSpeed: 100,
+		loop: true
+	});
 	container = document.createElement( 'div' );
 	$(container).attr('id','bg');
 	document.body.appendChild( container );
