@@ -42,6 +42,12 @@
 			    font-family: $narrow;
 			    font-weight: normal;
 		    }
+		    &#block-mobile{
+			    display: none;
+			    @include breakpoint(mobile){
+				    display: block;
+			    }
+		    }
 		}
 		ul{
 			font-size: 0.6rem;
@@ -74,7 +80,7 @@ p#block{
     padding: $pad;
     left:50%;
     width: 50%;
-    margin-top: 60px;
+    margin-top: 90px;
     font-size: 2rem;
     margin-left: 60px;
     background: #191919;
@@ -107,6 +113,9 @@ video{
 	@include transition(opacity 0.5s $ease 0s, 0s transform);
 	@include opacity(1);
 	visibility: visible;	
+	@include breakpoint(mobile){
+		display: none;
+	}
 }
 
 @include breakpoint(mobile){

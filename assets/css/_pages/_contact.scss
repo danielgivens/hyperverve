@@ -1,6 +1,15 @@
 #contact{
 	overflow: hidden;
 	height: 100%;
+	#hairline{
+		width: 50%;
+		position: absolute;
+		top:50%;
+		left:50%;
+		height: 3px;
+		background: #191919;
+		@include transform(translateY(-50%) translateX(-50%));
+	}
 	article{
 		position: absolute;
 		height: 50vh;
@@ -151,6 +160,11 @@
 				}
 			}
 		}
+	}
+}
+.hover-contact{
+	#contact #hairline{
+		display: none;
 	}
 }
 .no-mix-blend-mode{
