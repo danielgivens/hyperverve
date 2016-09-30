@@ -4,13 +4,12 @@
 	@extend %clearfix;
 	#is{
 		position: relative;
-		//padding-left:200px;
 		padding-top:200px;
-		width: 25%;
+		width: 30%;
 		left:0;
 		text-align: center;
 		display: block;
-		font-family: $serif;
+		font-family: $sans;
 		font-size: 2rem;
 		font-weight: bold;
 		z-index: 100;
@@ -19,7 +18,7 @@
 		position: relative;
 		z-index: 100;
 		width: 60%;
-		margin: 50px 60px 150px 30%;
+		margin: 50px 60px 120px 30%;
 		h1{
 			font-family: $sans;
 			font-weight: bold;
@@ -30,12 +29,11 @@
 	article{
 		position: relative;
 		z-index: 100;
-		margin: 0 60px 100px 50%;
+		margin: 420px 0 100px 50%;
 		p{
-			max-width: 300px;
 		    line-height: 1.5;
 		    letter-spacing: 0.1rem;
-		    font-family: $serif;
+		    font-family: $sans;
 		    font-size: 0.9rem;
 		    text-align: justify;
 		    margin-left: 120px;
@@ -44,13 +42,19 @@
 			    font-family: $narrow;
 			    font-weight: normal;
 		    }
+		    &#block-mobile{
+			    display: none;
+			    @include breakpoint(mobile){
+				    display: block;
+			    }
+		    }
 		}
 		ul{
 			font-size: 0.6rem;
 			text-transform: uppercase;
 			margin-top: 300px;
 			margin-bottom: 100px;
-			margin-left: 60px;
+			margin-left: 120px;
 			li{
 				margin-bottom: 10px;
 				line-height: 1rem;
@@ -68,17 +72,36 @@
 		font-weight: bold;		
 	}
 }
+p#block{
+    line-height: 1.5;
+    letter-spacing: 0.1rem;
+    font-family: $sans;
+    height: 240px;
+    padding: $pad;
+    left:50%;
+    width: 50%;
+    margin-top: 90px;
+    font-size: 2rem;
+    margin-left: 60px;
+    background: #191919;
+    color: white;
+    margin-bottom: 120px;
+    position: absolute;
+    z-index: 100;
+	visibility: hidden;
+	@include opacity(0);
+	@include transition(opacity 0s $ease 0s, 0s transform);
+}
 video{
 	position: absolute;
 	z-index: 100;
 	left:0px;
 	top:100%;
-	margin-top: 0;
+	margin-top: 240px;
 	height: auto;
 	@include calc('width','50% - 100px');
 	visibility: hidden;
 	@include opacity(0);
-	box-shadow: 0 5px 20px rgba(0,0,0,0.2);
 	@include transition(opacity 0s $ease 0s, 0s transform);
 }
 .show-about.interior video{
@@ -86,6 +109,15 @@ video{
 	@include opacity(1);
 	visibility: visible;
 }
+.show-about.interior p#block{
+	@include transition(opacity 0.5s $ease 0s, 0s transform);
+	@include opacity(1);
+	visibility: visible;	
+	@include breakpoint(mobile){
+		display: none;
+	}
+}
+
 @include breakpoint(mobile){
 	#about{
 		height: 100%;
