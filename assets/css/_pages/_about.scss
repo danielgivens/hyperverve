@@ -10,7 +10,7 @@
 		left:0;
 		text-align: center;
 		display: block;
-		font-family: $serif;
+		font-family: $sans;
 		font-size: 2rem;
 		font-weight: bold;
 		z-index: 100;
@@ -32,16 +32,22 @@
 		z-index: 100;
 		margin: 0 60px 100px 50%;
 		p{
-			max-width: 300px;
+			//max-width: 300px;
 		    line-height: 1.5;
 		    letter-spacing: 0.1rem;
-		    font-family: $mono;
+		    font-family: $sans;
 		    font-size: 0.9rem;
 		    text-align: justify;
 		    margin-left: 120px;
 		    margin-bottom: 30px;
 		    &:nth-of-type(1){
-			    min-height: 200px;
+			    min-height: 300px;
+			    padding: $pad;
+			    font-size: 2rem;
+			    margin-left: 60px;
+			    background: #191919;
+			    color: white;
+			    margin-bottom: 120px;
 		    }
 		    em{
 			    font-family: $narrow;
@@ -62,6 +68,13 @@
 				}
 			}
 		}
+	}
+	#copyright{
+		font-family: $sans;
+		margin-left: 240px;
+		font-size: 0.6rem;
+		font-weight: bold;
+		padding-top: 120px;
 	}
 	h2{
 		margin-left: 50%;
