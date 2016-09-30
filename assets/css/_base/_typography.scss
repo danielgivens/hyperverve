@@ -1,17 +1,5 @@
 @font-face {
   font-family: 'Liberation Mono';
-  src: url('../fonts/LiberationMono-Bold.eot'); /* IE9 Compat Modes */
-  src: url('../fonts/LiberationMono-Bold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('../fonts/LiberationMono-Bold.woff') format('woff'), /* Modern Browsers */
-       url('../fonts/LiberationMono-Bold.ttf')  format('truetype'), /* Safari, Android, iOS */
-       url('../fonts/LiberationMono-Bold.svg#eafb1dec33462d156ec5a4fe50848078') format('svg'); /* Legacy iOS */
-       
-  font-style:   normal;
-  font-weight:  700;
-}
-
-@font-face {
-  font-family: 'Liberation Mono';
   src: url('../fonts/fonts/LiberationMono-Regular.eot'); /* IE9 Compat Modes */
   src: url('../fonts/LiberationMono-Regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
        url('../fonts/LiberationMono-Regular.woff') format('woff'), /* Modern Browsers */
@@ -45,43 +33,6 @@
   font-style:   normal;
   font-weight:  400;
 }
-
-@font-face {
-  font-family: 'Liberation Sans Narrow';
-  src: url('../fonts/LiberationSansNarrow-Bold.eot'); /* IE9 Compat Modes */
-  src: url('../fonts/LiberationSansNarrow-Bold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('../fonts/LiberationSansNarrow-Bold.woff') format('woff'), /* Modern Browsers */
-       url('../fonts/LiberationSansNarrow-Bold.ttf')  format('truetype'), /* Safari, Android, iOS */
-       url('../fonts/LiberationSansNarrow-Bold.svg#6fa2b570a66d526e680ed2627c54bb5c') format('svg'); /* Legacy iOS */
-       
-  font-style:   normal;
-  font-weight:  700;
-}
-
-@font-face {
-  font-family: 'Liberation Sans Narrow';
-  src: url('../fonts/LiberationSansNarrow-Regular.eot'); /* IE9 Compat Modes */
-  src: url('../fonts/LiberationSansNarrow-Regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('../fonts/LiberationSansNarrow-Regular.woff') format('woff'), /* Modern Browsers */
-       url('../fonts/LiberationSansNarrow-Regular.ttf')  format('truetype'), /* Safari, Android, iOS */
-       url('../fonts/LiberationSansNarrow-Regular.svg#c719905fccd11e4da4de4ba2fde5c98c') format('svg'); /* Legacy iOS */
-       
-  font-style:   normal;
-  font-weight:  400;
-}
-
-@font-face {
-  font-family: 'Liberation Serif';
-  src: url('../fonts/LiberationSerif-Italic.eot'); /* IE9 Compat Modes */
-  src: url('../fonts/LiberationSerif-Italic.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('../fonts/LiberationSerif-Italic.woff') format('woff'), /* Modern Browsers */
-       url('../fonts/LiberationSerif-Italic.ttf')  format('truetype'), /* Safari, Android, iOS */
-       url('../fonts/LiberationSerif-Italic.svg#23f7a6c29ea425a96bc10287042f38c2') format('svg'); /* Legacy iOS */
-       
-  font-style:   italic;
-  font-weight:  400;
-}
-
 @font-face {
   font-family: 'Liberation Serif';
   src: url('../fonts/LiberationSerif-Regular.eot'); /* IE9 Compat Modes */
@@ -96,7 +47,6 @@
 $mono: 'Liberation Mono', monospace, sans-serif;
 $sans: 'Liberation Sans', sans-serif;
 $serif: 'Liberation Serif', serif;
-$narrow: 'Liberation Sans Narrow', serif;
 html {
 	font-family: $mono;
 	font-size: 100%;
