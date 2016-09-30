@@ -1,19 +1,23 @@
 module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        /*concat: {   
+        concat: {   
 		    libs: {
 		        src: [
-		            'assets/js/vendor/jquery.js', 
-		            'assets/js/vendor/video.js',
-		            'assets/js/vendor/cycle.js', 
-		            'assets/js/vendor/gsap.js', 
-		            'assets/js/vendor/ScrollToPlugin.min.js',
-		            'assets/js/plugins.js'
+		            'assets/js/three.min.js', 
+		            'assets/js/libs/tween.min.js', 
+		            'assets/js/loaders/BinaryLoader.js',
+		            'assets/js/shaders/CopyShader.js',
+		            'assets/js/shaders/DigitalGlitch.js',
+		            'assets/js/postprocessing/EffectComposer.js',
+		            'assets/js/postprocessing/RenderPass.js',
+		            'assets/js/postprocessing/MaskPass.js',
+		            'assets/js/postprocessing/ShaderPass.js',
+		            'assets/js/postprocessing/GlitchPass.js'
 		        ],
-		        dest: 'assets/js/libs.js',
+		        dest: 'assets/js/bundle.js',
 		    },	    
-		},*/
+		},
 		watch: {
 			options: {
 		        livereload: true,
@@ -48,6 +52,10 @@ module.exports = function(grunt) {
 		        src: 'assets/js/base.js',
 		        dest: 'assets/js/base.min.js',
 		    },
+		    plugins: {
+		        src: 'assets/js/plugins.js',
+		        dest: 'assets/js/plugins.min.js',
+		    },
 		},
     });
     grunt.loadNpmTasks('grunt-contrib-concat');
@@ -55,6 +63,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-sass');	
 	
-    grunt.registerTask('work', ['watch','uglify','sass']);
-    grunt.registerTask('build', ['uglify','sass']);
+    grunt.registerTask('work', ['watch','uglify','sass','concat']);
+    grunt.registerTask('build', ['uglify','sass','concat']);
 };
