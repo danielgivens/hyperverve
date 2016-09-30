@@ -20,7 +20,7 @@
 			font-weight: bold;
 			@include transform(translateY(-50%));
 			em{
-				margin-left: 400px;
+				padding-left: 0;
 			}			
 		}
 		aside{
@@ -114,6 +114,9 @@
 			background: #191919;
 			h1{
 				color: white;
+				em{
+					padding-left: 400px;
+				}
 			}
 			aside{
 				display: block;

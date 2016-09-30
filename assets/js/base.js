@@ -244,7 +244,7 @@ function onScroll(delta){
 			$scrolled = $max;
 		}
 	    $('#about').css('transform','translateY('+$scrolled+'px)');
-		$('video').css('transform','translateY('+$scrolled+'px)');
+		$('video, #block').css('transform','translateY('+$scrolled+'px)');
     }
 }
 function onDocumentMouseDown(event) {
@@ -297,7 +297,7 @@ function onAboutClick(event) {
 	tween2.start();
 	$scrolled = 0;
 	$('#about').css('transform','translateY(0px)');
-	$('video').css('transform','translateY(0px)');
+	$('video, #block').css('transform','translateY(0px)');
 	tween2.onComplete(function() {
 		if(!isMobile){
 			$speed = 0;
@@ -328,8 +328,8 @@ function onAboutClick(event) {
 			glitchPass.goWild = false;
 			$('video').get(0).play();	
 			$('#about').css('transform','translateY(0px)');
-			$('video').css('transform','translateY(0px)');
-			$('video').css('top',parseInt($('#about hgroup').outerHeight())+parseInt($('#about hgroup').offset().top)+300+'px');
+			$('video, #block').css('transform','translateY(0px)');
+			$('video, #block').css('top',parseInt($('#about hgroup').outerHeight())+parseInt($('#about hgroup').offset().top)+'px');
 		},600);
 	});
 }

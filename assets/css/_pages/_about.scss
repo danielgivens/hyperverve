@@ -4,9 +4,8 @@
 	@extend %clearfix;
 	#is{
 		position: relative;
-		//padding-left:200px;
 		padding-top:200px;
-		width: 25%;
+		width: 30%;
 		left:0;
 		text-align: center;
 		display: block;
@@ -19,7 +18,7 @@
 		position: relative;
 		z-index: 100;
 		width: 60%;
-		margin: 50px 60px 150px 30%;
+		margin: 50px 60px 120px 30%;
 		h1{
 			font-family: $sans;
 			font-weight: bold;
@@ -30,9 +29,8 @@
 	article{
 		position: relative;
 		z-index: 100;
-		margin: 0 60px 100px 50%;
+		margin: 420px 0 100px 50%;
 		p{
-			//max-width: 300px;
 		    line-height: 1.5;
 		    letter-spacing: 0.1rem;
 		    font-family: $sans;
@@ -40,15 +38,6 @@
 		    text-align: justify;
 		    margin-left: 120px;
 		    margin-bottom: 30px;
-		    &:nth-of-type(1){
-			    min-height: 240px;
-			    padding: $pad;
-			    font-size: 2rem;
-			    margin-left: 60px;
-			    background: #191919;
-			    color: white;
-			    margin-bottom: 120px;
-		    }
 		    em{
 			    font-family: $narrow;
 			    font-weight: normal;
@@ -77,12 +66,32 @@
 		font-weight: bold;		
 	}
 }
+p#block{
+    line-height: 1.5;
+    letter-spacing: 0.1rem;
+    font-family: $sans;
+    height: 240px;
+    padding: $pad;
+    left:50%;
+    width: 50%;
+    margin-top: 60px;
+    font-size: 2rem;
+    margin-left: 60px;
+    background: #191919;
+    color: white;
+    margin-bottom: 120px;
+    position: absolute;
+    z-index: 100;
+	visibility: hidden;
+	@include opacity(0);
+	@include transition(opacity 0s $ease 0s, 0s transform);
+}
 video{
 	position: absolute;
 	z-index: 100;
 	left:0px;
 	top:100%;
-	margin-top: 0;
+	margin-top: 240px;
 	height: auto;
 	@include calc('width','50% - 100px');
 	visibility: hidden;
@@ -94,6 +103,12 @@ video{
 	@include opacity(1);
 	visibility: visible;
 }
+.show-about.interior p#block{
+	@include transition(opacity 0.5s $ease 0s, 0s transform);
+	@include opacity(1);
+	visibility: visible;	
+}
+
 @include breakpoint(mobile){
 	#about{
 		height: 100%;
