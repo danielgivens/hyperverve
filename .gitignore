@@ -1,2 +1,6 @@
 .sass-cache
 node_modules
+assets/js/.DS_Store
+assets/images/.DS_Store
+assets/.DS_Store
+.DS_Store
